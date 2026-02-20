@@ -305,24 +305,11 @@
         }
 
         .color-picker {
-            width: 80px;
+            width: 100%;
             height: 80px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-        }
-
-        .color-preview-small {
-            flex: 1;
-            height: 80px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         /* 颜色分析布局 */
@@ -798,7 +785,6 @@
                                 <label class="input-label">或选择颜色</label>
                                 <div class="color-picker-wrapper">
                                     <input type="color" class="color-picker" id="colorPicker" value="#FFB6C1">
-                                    <div class="color-preview-small" id="colorPreviewSmall">#FFB6C1</div>
                                 </div>
                             </div>
                         </div>
@@ -1842,8 +1828,14 @@
             const fullHex = '#' + hex.toUpperCase();
             const hsl = hexToHsl(fullHex);
 
-            document.getElementById('colorPreviewSmall').style.backgroundColor = fullHex;
-            document.getElementById('colorPreviewSmall').textContent = fullHex;
+            // 更新颜色选择器
+            document.getElementById('colorPicker').value = fullHex;
+
+            // 更新亮度调节预览
+            const lightness = parseInt(document.getElementById('lightnessSlider').value);
+            const adjustedHex = hslToHex(hsl.h, hsl.s, lightness);
+            document.getElementById('sliderPreview').style.backgroundColor = adjustedHex;
+            document.getElementById('sliderHex').textContent = adjustedHex;
 
             // 生成亮度梯度
             const output = document.getElementById('lightnessOutput');
