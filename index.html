@@ -1908,7 +1908,7 @@
                     schemeDiv.style.transform = 'translateY(0)';
                     schemeDiv.style.boxShadow = 'none';
                 };
-                schemeDiv.onclick = () => showCharts(scheme.colors, scheme.name);
+                schemeDiv.onclick = () => openChartModal({name: scheme.name, colors: scheme.colors});
 
                 const titleDiv = document.createElement('div');
                 titleDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;';
