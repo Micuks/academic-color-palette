@@ -734,13 +734,13 @@
 
         <!-- 标签导航 -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('palette')">配色库</button>
-            <button class="tab-btn" onclick="switchTab('lightness')">颜色分析</button>
+            <button class="tab-btn" onclick="switchTab('palette')">配色库</button>
+            <button class="tab-btn active" onclick="switchTab('lightness')">颜色分析</button>
             <button class="tab-btn" onclick="switchTab('tools')">工具箱</button>
         </div>
 
         <!-- 配色库 -->
-        <div id="palette" class="tab-content active">
+        <div id="palette" class="tab-content">
             <section class="section">
                 <h2 class="section-title">配色库</h2>
 
@@ -761,7 +761,7 @@
         </div>
 
         <!-- 亮度调节器 -->
-        <div id="lightness" class="tab-content">
+        <div id="lightness" class="tab-content active">
             <section class="section">
                 <h2 class="section-title">颜色分析与配色推荐</h2>
                 <div class="color-analysis-layout">
