@@ -1898,7 +1898,16 @@
 
             schemes.forEach(scheme => {
                 const schemeDiv = document.createElement('div');
-                schemeDiv.style.cssText = 'margin-bottom: 25px; background: #FAFAFA; padding: 20px; border-radius: 15px;';
+                schemeDiv.style.cssText = 'margin-bottom: 25px; background: #FAFAFA; padding: 20px; border-radius: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;';
+                schemeDiv.onmouseenter = () => {
+                    schemeDiv.style.transform = 'translateY(-3px)';
+                    schemeDiv.style.boxShadow = '0 5px 20px rgba(255, 182, 193, 0.3)';
+                };
+                schemeDiv.onmouseleave = () => {
+                    schemeDiv.style.transform = 'translateY(0)';
+                    schemeDiv.style.boxShadow = 'none';
+                };
+                schemeDiv.onclick = () => showCharts(scheme.colors, scheme.name);
 
                 const titleDiv = document.createElement('div');
                 titleDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;';
@@ -1907,6 +1916,7 @@
                         <span style="font-size: 1.1rem; font-weight: 600; color: #5D5D5D;">${scheme.name}</span>
                         <span style="font-size: 0.9rem; color: #888; margin-left: 10px;">${scheme.description}</span>
                     </div>
+                    <div style="font-size: 0.85rem; color: #FFB6C1;">📊 点击预览图表</div>
                 `;
 
                 const colorsDiv = document.createElement('div');
