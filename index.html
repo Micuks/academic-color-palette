@@ -2059,35 +2059,71 @@
                 cyberpunk: '赛博朋克配色'
             };
 
-            result.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; cursor: pointer; padding: 15px; border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='#FFF0F5'" onmouseout="this.style.background='transparent'" onclick="openChartModal({name: '${styleNames[currentColorStyle]}', colors: ${JSON.stringify(colors)}})">
-                    ${colors.map(color => `
-                        <div style="text-align: center;">
-                            <div style="
-                                width: 100%;
-                                height: 80px;
-                                background: ${color};
-                                border-radius: 10px;
-                                margin-bottom: 8px;
-                                cursor: pointer;
-                                box-shadow: 0 3px 15px ${shadowColor};
-                                transition: transform 0.2s;
-                            " onclick="event.stopPropagation(); copyToClipboard('${color}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"></div>
-                            <div style="
-                                font-family: 'Courier New', monospace;
-                                font-size: 0.85rem;
-                                color: #5D5D5D;
-                                background: white;
-                                padding: 5px 10px;
-                                border-radius: 15px;
-                                cursor: pointer;
-                                border: 2px solid #F0F0F0;
-                            " onclick="event.stopPropagation(); copyToClipboard('${color}')">${color}</div>
-                        </div>
-                    `).join('')}
-                </div>
-                <div style="text-align: center; margin-top: 10px; font-size: 0.85rem; color: #FFB6C1;">📊 点击颜色区域预览图表效果</div>
-            `;
+            // 创建容器
+            const container = document.createElement('div');
+            container.style.cssText = 'cursor: pointer; padding: 15px; border-radius: 15px; transition: all 0.3s;';
+            container.onmouseenter = () => container.style.background = '#FFF0F5';
+            container.onmouseleave = () => container.style.background = 'transparent';
+            container.onclick = () => openChartModal({name: styleNames[currentColorStyle], colors: colors});
+
+            // 创建颜色网格
+            const grid = document.createElement('div');
+            grid.style.cssText = 'display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;';
+
+            colors.forEach(color => {
+                const colorDiv = document.createElement('div');
+                colorDiv.style.textAlign = 'center';
+
+                const colorBox = document.createElement('div');
+                colorBox.style.cssText = `
+                    width: 100%;
+                    height: 80px;
+                    background: ${color};
+                    border-radius: 10px;
+                    margin-bottom: 8px;
+                    cursor: pointer;
+                    box-shadow: 0 3px 15px ${shadowColor};
+                    transition: transform 0.2s;
+                `;
+                colorBox.onclick = (e) => {
+                    e.stopPropagation();
+                    copyToClipboard(color);
+                };
+                colorBox.onmouseenter = () => colorBox.style.transform = 'scale(1.05)';
+                colorBox.onmouseleave = () => colorBox.style.transform = 'scale(1)';
+
+                const hexLabel = document.createElement('div');
+                hexLabel.style.cssText = `
+                    font-family: 'Courier New', monospace;
+                    font-size: 0.85rem;
+                    color: #5D5D5D;
+                    background: white;
+                    padding: 5px 10px;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    border: 2px solid #F0F0F0;
+                `;
+                hexLabel.textContent = color;
+                hexLabel.onclick = (e) => {
+                    e.stopPropagation();
+                    copyToClipboard(color);
+                };
+
+                colorDiv.appendChild(colorBox);
+                colorDiv.appendChild(hexLabel);
+                grid.appendChild(colorDiv);
+            });
+
+            container.appendChild(grid);
+
+            // 添加提示文字
+            const hint = document.createElement('div');
+            hint.style.cssText = 'text-align: center; margin-top: 10px; font-size: 0.85rem; color: #FFB6C1;';
+            hint.textContent = '📊 点击颜色区域预览图表效果';
+            container.appendChild(hint);
+
+            result.innerHTML = '';
+            result.appendChild(container);
         }
 
         // 随机马卡龙配色
