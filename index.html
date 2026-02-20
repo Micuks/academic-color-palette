@@ -2051,8 +2051,16 @@
                 shadowColor = 'rgba(0, 255, 255, 0.3)';
             }
 
+            // 获取色系名称
+            const styleNames = {
+                macaron: '马卡龙配色',
+                morandi: '莫兰迪配色',
+                memphis: '孟菲斯配色',
+                cyberpunk: '赛博朋克配色'
+            };
+
             result.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;">
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; cursor: pointer; padding: 15px; border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.background='#FFF0F5'" onmouseout="this.style.background='transparent'" onclick="openChartModal({name: '${styleNames[currentColorStyle]}', colors: ${JSON.stringify(colors)}})">
                     ${colors.map(color => `
                         <div style="text-align: center;">
                             <div style="
@@ -2063,7 +2071,8 @@
                                 margin-bottom: 8px;
                                 cursor: pointer;
                                 box-shadow: 0 3px 15px ${shadowColor};
-                            " onclick="copyToClipboard('${color}')"></div>
+                                transition: transform 0.2s;
+                            " onclick="event.stopPropagation(); copyToClipboard('${color}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"></div>
                             <div style="
                                 font-family: 'Courier New', monospace;
                                 font-size: 0.85rem;
@@ -2073,10 +2082,11 @@
                                 border-radius: 15px;
                                 cursor: pointer;
                                 border: 2px solid #F0F0F0;
-                            " onclick="copyToClipboard('${color}')">${color}</div>
+                            " onclick="event.stopPropagation(); copyToClipboard('${color}')">${color}</div>
                         </div>
                     `).join('')}
                 </div>
+                <div style="text-align: center; margin-top: 10px; font-size: 0.85rem; color: #FFB6C1;">📊 点击颜色区域预览图表效果</div>
             `;
         }
 
