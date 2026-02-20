@@ -575,6 +575,28 @@
             transform: translateY(-2px);
         }
 
+        .color-style-btn {
+            background: #F0F0F0;
+            color: #5D5D5D;
+            border: 2px solid #E0E0E0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .color-style-btn:hover {
+            background: #FFE5EC;
+            border-color: #FFB6C1;
+        }
+
+        .color-style-btn.active {
+            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            color: white;
+            border-color: transparent;
+        }
+
         .tool-result {
             margin-top: 15px;
             padding: 15px;
@@ -826,52 +848,25 @@
                         <div class="tool-result" id="aiResult" style="min-height: 150px;"></div>
                     </div>
 
-                    <!-- 随机马卡龙配色 -->
-                    <div class="tool-card">
-                        <h3 class="tool-title">🎲 马卡龙色</h3>
-                        <p style="color: #888; font-size: 0.85rem; line-height: 1.6; margin-bottom: 12px;">
-                            <strong style="color: #FFB6C1;">低饱和·高亮度</strong><br>
-                            马卡龙色系源自法式甜点，特点是<strong>低饱和度、高亮度</strong>的柔和色彩。
-                            这种配色温柔、梦幻、充满少女感，适合品牌设计、婚礼主题、甜品包装等场景。
-                        </p>
-                        <button class="tool-btn" onclick="randomPalette()" style="width: 100%;">随机生成</button>
-                        <div class="tool-result" id="randomResult"></div>
-                    </div>
+                    <!-- 随机配色生成器 -->
+                    <div class="tool-card" style="grid-column: span 2;">
+                        <h3 class="tool-title">🎲 随机配色生成器</h3>
 
-                    <!-- 随机莫兰迪配色 -->
-                    <div class="tool-card">
-                        <h3 class="tool-title">🎨 莫兰迪色</h3>
-                        <p style="color: #888; font-size: 0.85rem; line-height: 1.6; margin-bottom: 12px;">
-                            <strong style="color: #A8A8A8;">极低饱和·灰色调</strong><br>
-                            莫兰迪色系源自意大利画家乔治·莫兰迪，特点是<strong>极低饱和度、灰色调</strong>的优雅色彩。
-                            这种配色高级、内敛、充满艺术感，适合家居设计、品牌形象、艺术展览等场景。
-                        </p>
-                        <button class="tool-btn" onclick="randomMorandiPalette()" style="width: 100%;">随机生成</button>
-                        <div class="tool-result" id="morandiResult"></div>
-                    </div>
+                        <!-- 色系选择标签 -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                            <button class="color-style-btn active" onclick="switchColorStyle('macaron')" id="btn-macaron">🎲 马卡龙</button>
+                            <button class="color-style-btn" onclick="switchColorStyle('morandi')" id="btn-morandi">🎨 莫兰迪</button>
+                            <button class="color-style-btn" onclick="switchColorStyle('memphis')" id="btn-memphis">🌈 孟菲斯</button>
+                            <button class="color-style-btn" onclick="switchColorStyle('cyberpunk')" id="btn-cyberpunk">⚡ 赛博朋克</button>
+                        </div>
 
-                    <!-- 随机孟菲斯配色 -->
-                    <div class="tool-card">
-                        <h3 class="tool-title">🌈 孟菲斯色</h3>
-                        <p style="color: #888; font-size: 0.85rem; line-height: 1.6; margin-bottom: 12px;">
-                            <strong style="color: #FF6B6B;">高饱和·鲜艳明亮</strong><br>
-                            孟菲斯色系源自1980年代意大利孟菲斯设计集团，特点是<strong>高饱和度、鲜艳明亮</strong>的大胆色彩。
-                            这种配色活泼、年轻、充满叛逆感，适合潮流品牌、创意设计、时尚包装等场景。
-                        </p>
-                        <button class="tool-btn" onclick="randomMemphisPalette()" style="width: 100%;">随机生成</button>
-                        <div class="tool-result" id="memphisResult"></div>
-                    </div>
+                        <!-- 色系说明 -->
+                        <div id="colorStyleDesc" style="color: #888; font-size: 0.85rem; line-height: 1.6; margin-bottom: 15px; padding: 12px; background: #FFF0F5; border-radius: 10px;">
+                            <strong style="color: #FFB6C1;">马卡龙色系</strong> - 低饱和度、高亮度的柔和色彩，温柔梦幻，适合品牌设计、婚礼主题、甜品包装
+                        </div>
 
-                    <!-- 随机赛博朋克配色 -->
-                    <div class="tool-card">
-                        <h3 class="tool-title">⚡ 赛博朋克色</h3>
-                        <p style="color: #888; font-size: 0.85rem; line-height: 1.6; margin-bottom: 12px;">
-                            <strong style="color: #00FFFF;">霓虹高饱和·暗黑对比</strong><br>
-                            赛博朋克色系源自科幻电影，特点是<strong>极高饱和度、霓虹色彩</strong>的未来感配色。
-                            这种配色科幻、前卫、充满科技感，适合游戏设计、科技品牌、电子音乐等场景。
-                        </p>
-                        <button class="tool-btn" onclick="randomCyberpunkPalette()" style="width: 100%;">随机生成</button>
-                        <div class="tool-result" id="cyberpunkResult"></div>
+                        <button class="tool-btn" onclick="generateRandomPalette()" style="width: 100%;">随机生成</button>
+                        <div class="tool-result" id="randomPaletteResult"></div>
                     </div>
                 </div>
             </section>
@@ -916,17 +911,13 @@
                 <h3 style="color: #98D8C8; margin-top: 20px;">🛠️ 工具箱</h3>
                 <ul style="margin-left: 20px;">
                     <li><strong>AI咨询</strong> - 询问AI获取配色建议</li>
-                    <li><strong>随机马卡龙配色</strong> - 生成随机马卡龙配色方案</li>
-                    <li><strong>随机莫兰迪配色</strong> - 生成随机莫兰迪配色方案</li>
-                    <li><strong>随机孟菲斯配色</strong> - 生成随机孟菲斯配色方案</li>
-                    <li><strong>随机赛博朋克配色</strong> - 生成随机赛博朋克配色方案</li>
+                    <li><strong>随机配色生成器</strong> - 选择色系（马卡龙、莫兰迪、孟菲斯、赛博朋克）随机生成配色方案</li>
                 </ul>
 
                 <h3 style="color: #F7DC6F; margin-top: 20px;">💡 小提示</h3>
                 <ul style="margin-left: 20px;">
                     <li>所有颜色都支持一键复制</li>
                     <li>配色方案适合学术论文、数据可视化、演示文稿</li>
-                    <li>马卡龙配色特点：低饱和度、高亮度、柔和优雅</li>
                 </ul>
             </div>
         </div>
@@ -1955,6 +1946,138 @@
                 schemeDiv.appendChild(colorsDiv);
                 schemeOutput.appendChild(schemeDiv);
             });
+        }
+
+        // 当前选中的色系
+        let currentColorStyle = 'macaron';
+
+        // 色系说明
+        const colorStyleDescriptions = {
+            macaron: '<strong style="color: #FFB6C1;">马卡龙色系</strong> - 低饱和度、高亮度的柔和色彩，温柔梦幻，适合品牌设计、婚礼主题、甜品包装',
+            morandi: '<strong style="color: #A8A8A8;">莫兰迪色系</strong> - 极低饱和度、灰色调的优雅色彩，高级内敛，适合家居设计、品牌形象、艺术展览',
+            memphis: '<strong style="color: #FF6B6B;">孟菲斯色系</strong> - 高饱和度、鲜艳明亮的大胆色彩，活泼年轻，适合潮流品牌、创意设计、时尚包装',
+            cyberpunk: '<strong style="color: #00FFFF;">赛博朋克色系</strong> - 极高饱和度、霓虹色彩的未来感配色，科幻前卫，适合游戏设计、科技品牌、电子音乐'
+        };
+
+        // 切换色系
+        function switchColorStyle(style) {
+            currentColorStyle = style;
+
+            // 更新按钮状态
+            document.querySelectorAll('.color-style-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${style}`).classList.add('active');
+
+            // 更新说明
+            document.getElementById('colorStyleDesc').innerHTML = colorStyleDescriptions[style];
+        }
+
+        // 生成随机配色
+        function generateRandomPalette() {
+            let colors = [];
+
+            switch(currentColorStyle) {
+                case 'macaron':
+                    colors = generateMacaronColors();
+                    break;
+                case 'morandi':
+                    colors = generateMorandiColors();
+                    break;
+                case 'memphis':
+                    colors = generateMemphisColors();
+                    break;
+                case 'cyberpunk':
+                    colors = generateCyberpunkColors();
+                    break;
+            }
+
+            displayRandomPalette(colors);
+        }
+
+        // 生成马卡龙色
+        function generateMacaronColors() {
+            const colors = [];
+            for (let i = 0; i < 5; i++) {
+                const h = Math.random() * 360;
+                const s = 50 + Math.random() * 30;
+                const l = 70 + Math.random() * 20;
+                colors.push(hslToHex(h, s, l));
+            }
+            return colors;
+        }
+
+        // 生成莫兰迪色
+        function generateMorandiColors() {
+            const colors = [];
+            for (let i = 0; i < 5; i++) {
+                const h = Math.random() * 360;
+                const s = 15 + Math.random() * 25;
+                const l = 60 + Math.random() * 20;
+                colors.push(hslToHex(h, s, l));
+            }
+            return colors;
+        }
+
+        // 生成孟菲斯色
+        function generateMemphisColors() {
+            const colors = [];
+            for (let i = 0; i < 5; i++) {
+                const h = Math.random() * 360;
+                const s = 80 + Math.random() * 20;
+                const l = 50 + Math.random() * 20;
+                colors.push(hslToHex(h, s, l));
+            }
+            return colors;
+        }
+
+        // 生成赛博朋克色
+        function generateCyberpunkColors() {
+            const colors = [];
+            const cyberpunkHues = [330, 190, 120, 280, 200, 300, 150, 260];
+            for (let i = 0; i < 5; i++) {
+                const h = cyberpunkHues[Math.floor(Math.random() * cyberpunkHues.length)];
+                const s = 90 + Math.random() * 10;
+                const l = 50 + Math.random() * 20;
+                colors.push(hslToHex(h, s, l));
+            }
+            return colors;
+        }
+
+        // 显示随机配色结果
+        function displayRandomPalette(colors) {
+            const result = document.getElementById('randomPaletteResult');
+
+            let shadowColor = 'rgba(255, 182, 193, 0.3)';
+            if (currentColorStyle === 'cyberpunk') {
+                shadowColor = 'rgba(0, 255, 255, 0.3)';
+            }
+
+            result.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;">
+                    ${colors.map(color => `
+                        <div style="text-align: center;">
+                            <div style="
+                                width: 100%;
+                                height: 80px;
+                                background: ${color};
+                                border-radius: 10px;
+                                margin-bottom: 8px;
+                                cursor: pointer;
+                                box-shadow: 0 3px 15px ${shadowColor};
+                            " onclick="copyToClipboard('${color}')"></div>
+                            <div style="
+                                font-family: 'Courier New', monospace;
+                                font-size: 0.85rem;
+                                color: #5D5D5D;
+                                background: white;
+                                padding: 5px 10px;
+                                border-radius: 15px;
+                                cursor: pointer;
+                                border: 2px solid #F0F0F0;
+                            " onclick="copyToClipboard('${color}')">${color}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
         }
 
         // 随机马卡龙配色
