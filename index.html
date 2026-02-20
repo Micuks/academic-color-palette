@@ -1402,6 +1402,35 @@
                                 filter: function(item) {
                                     return !item.text.includes('误差带');
                                 }
+                            },
+                            // 自定义点击事件：同时隐藏/显示主折线和对应的Error Band
+                            onClick: function(e, legendItem, legend) {
+                                const index = legendItem.datasetIndex;
+                                const chart = legend.chart;
+
+                                // 主折线的索引（每个颜色有3个dataset: 上界、下界、主折线）
+                                // 所以主折线的索引是: 2, 5, 8, 11, ...
+                                // 对应的Error Band索引是: index-2, index-1
+
+                                // 切换主折线的显示状态
+                                const mainLineMeta = chart.getDatasetMeta(index);
+                                mainLineMeta.hidden = mainLineMeta.hidden === null ? !chart.data.datasets[index].hidden : null;
+
+                                // 同时切换对应的Error Band
+                                // Error Band的索引：主折线索引 - 2 (上界) 和 - 1 (下界)
+                                const upperBoundIndex = index - 2;
+                                const lowerBoundIndex = index - 1;
+
+                                if (upperBoundIndex >= 0) {
+                                    const upperMeta = chart.getDatasetMeta(upperBoundIndex);
+                                    upperMeta.hidden = mainLineMeta.hidden;
+                                }
+                                if (lowerBoundIndex >= 0) {
+                                    const lowerMeta = chart.getDatasetMeta(lowerBoundIndex);
+                                    lowerMeta.hidden = mainLineMeta.hidden;
+                                }
+
+                                chart.update();
                             }
                         }
                     },
