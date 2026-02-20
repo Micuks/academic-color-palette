@@ -803,7 +803,8 @@
 
                     <!-- 右侧：配色方案推荐 -->
                     <div class="right-panel">
-                        <h3 style="color: #5D5D5D; margin-bottom: 20px; font-size: 1.3rem;">🎨 配色方案推荐</h3>
+                        <h3 style="color: #5D5D5D; margin-bottom: 10px; font-size: 1.3rem;">🎨 配色方案推荐</h3>
+                        <p style="color: #888; font-size: 0.85rem; margin-bottom: 20px;">点击配色方案卡片预览图表效果</p>
                         <div id="schemeOutput">
                             <!-- 配色方案由 JS 生成 -->
                         </div>
@@ -1916,7 +1917,6 @@
                         <span style="font-size: 1.1rem; font-weight: 600; color: #5D5D5D;">${scheme.name}</span>
                         <span style="font-size: 0.9rem; color: #888; margin-left: 10px;">${scheme.description}</span>
                     </div>
-                    <div style="font-size: 0.85rem; color: #FFB6C1;">📊 点击预览图表</div>
                 `;
 
                 const colorsDiv = document.createElement('div');
@@ -1941,7 +1941,10 @@
                         transition: transform 0.2s;
                     `;
                     colorBox.textContent = color;
-                    colorBox.onclick = () => copyToClipboard(color);
+                    colorBox.onclick = (e) => {
+                        e.stopPropagation();
+                        copyToClipboard(color);
+                    };
                     colorBox.onmouseenter = () => colorBox.style.transform = 'scale(1.05)';
                     colorBox.onmouseleave = () => colorBox.style.transform = 'scale(1)';
 
