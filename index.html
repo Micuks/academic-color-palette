@@ -1435,7 +1435,7 @@
                 type: 'bar',
                 data: {
                     labels: ['类别A', '类别B', '类别C', '类别D', '类别E'],
-                    datasets: colors.slice(0, 4).map((color, i) => ({
+                    datasets: colors.map((color, i) => ({
                         label: `系列 ${i + 1}`,
                         data: Array.from({length: 5}, () => Math.random() * 100),
                         backgroundColor: color + 'CC',
