@@ -2782,7 +2782,7 @@
         }
 
         // 渲染配色库
-        async function renderPalettes(filterType = '三角配色') {
+        async function renderPalettes(filterType = '三角配色', sortBy = 'time') {
             const grid = document.getElementById('paletteGrid');
             grid.innerHTML = '<div style="text-align: center; padding: 40px;">加载中...</div>'; // 显示加载中
 
@@ -2791,17 +2791,20 @@
             if (filterType === '自定义') {
                 // 从API获取自定义配色
                 try {
-                    const response = await fetch(`${API_BASE}/api/palettes?type=${encodeURIComponent('自定义')}`);
+                    const sortParam = sortBy === 'likes' ? 'likes' : 'time';
+                    const response = await fetch(`${API_BASE}/api/palettes?type=${encodeURIComponent('自定义')}&sort=${sortParam}`);
                     const data = await response.json();
                     if (data.success) {
                         filteredPalettes = data.palettes.map(p => ({
+                            id: p.id,
                             name: p.name,
                             description: p.description || '用户上传的配色方案',
                             type: p.type,
                             colors: p.colors,
                             userId: p.userId,
                             username: p.username,
-                            likes: p.likes
+                            likes: p.likes,
+                            createdAt: p.createdAt
                         }));
                     } else {
                         grid.innerHTML = '<div style="text-align: center; padding: 40px; color: #888;">加载失败，请刷新重试</div>';
@@ -3010,8 +3013,25 @@
                 }
             });
 
+            // 获取当前排序方式
+            const sortSelect = document.getElementById('sortSelect');
+            const sortBy = sortSelect ? sortSelect.value : 'time';
+
             // 重新渲染配色方案
-            renderPalettes(type);
+            renderPalettes(type, sortBy);
+        }
+
+        // 排序配色方案
+        function sortPalettes() {
+            const sortSelect = document.getElementById('sortSelect');
+            const sortBy = sortSelect ? sortSelect.value : 'time';
+
+            // 获取当前筛选类型
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const filterType = activeBtn ? (activeBtn.textContent.includes('自定义') ? '自定义' : activeBtn.textContent) : '三角配色';
+
+            // 重新渲染配色方案
+            renderPalettes(filterType, sortBy);
         }
 
         // HEX 转 HSL
