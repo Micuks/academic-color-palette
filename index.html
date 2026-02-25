@@ -2859,57 +2859,118 @@
 
                 const desc = document.createElement('div');
                 desc.className = 'palette-description';
-                desc.textContent = `${palette.description} (${palette.type})`;
+                desc.textContent = palette.description || '用户上传的配色方案';
 
-                // 显示上传者和点赞数（仅自定义配色）
+                info.appendChild(name);
+                info.appendChild(desc);
+
+                // 自定义配色显示元信息
                 if (filterType === '自定义' && palette.username) {
-                    const meta = document.createElement('div');
-                    meta.className = 'palette-meta';
-                    meta.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.85rem; color: #888;';
+                    const metaContainer = document.createElement('div');
+                    metaContainer.style.cssText = 'margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee;';
 
-                    const uploader = document.createElement('span');
-                    uploader.textContent = `上传者: ${palette.username}`;
+                    // 上传者信息
+                    const uploaderInfo = document.createElement('div');
+                    uploaderInfo.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 8px;';
 
-                    const likesInfo = document.createElement('span');
-                    likesInfo.style.cssText = 'display: flex; align-items: center; gap: 4px;';
-                    likesInfo.innerHTML = `<span style="color: #ff6b6b;">❤️</span> ${palette.likes || 0}`;
+                    const avatar = document.createElement('div');
+                    avatar.style.cssText = 'width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;';
+                    avatar.textContent = palette.username.charAt(0).toUpperCase();
 
-                    meta.appendChild(uploader);
-                    meta.appendChild(likesInfo);
-                    desc.appendChild(meta);
+                    const uploaderText = document.createElement('div');
+                    uploaderText.style.cssText = 'flex: 1;';
 
-                    // 添加点赞按钮
+                    const uploaderName = document.createElement('div');
+                    uploaderName.style.cssText = 'font-size: 0.9rem; color: #333; font-weight: 500;';
+                    uploaderName.textContent = palette.username;
+
+                    const uploadTime = document.createElement('div');
+                    uploadTime.style.cssText = 'font-size: 0.75rem; color: #999;';
+                    uploadTime.textContent = palette.createdAt ? new Date(palette.createdAt).toLocaleDateString('zh-CN') : '刚刚';
+
+                    uploaderText.appendChild(uploaderName);
+                    uploaderText.appendChild(uploadTime);
+
+                    uploaderInfo.appendChild(avatar);
+                    uploaderInfo.appendChild(uploaderText);
+
+                    // 点赞按钮
+                    const likeContainer = document.createElement('div');
+                    likeContainer.style.cssText = 'display: flex; align-items: center; justify-content: space-between;';
+
                     const likeBtn = document.createElement('button');
-                    likeBtn.className = 'like-btn';
-                    likeBtn.style.cssText = 'margin-top: 8px; padding: 6px 12px; background: #ff6b6b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem;';
-                    likeBtn.textContent = '❤️ 点赞';
-                    likeBtn.onclick = async (e) => {
-                        e.stopPropagation();
-                        if (!currentUser) {
-                            alert('请先登录');
-                            return;
-                        }
+                    likeBtn.className = 'like-button';
+                    likeBtn.style.cssText = 'display: flex; align-items: center; gap: 6px; padding: 8px 16px; background: white; border: 1px solid #e0e0e0; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; color: #666;';
+
+                    // 检查是否已点赞
+                    const checkLikeStatus = async () => {
                         try {
-                            const response = await fetch(`${API_BASE}/api/palettes/${palette.id}/like`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                }
+                            const headers = {'Content-Type': 'application/json'};
+                            if (currentUser) {
+                                headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+                            }
+                            const response = await fetch(`${API_BASE}/api/palettes/${palette.id}/like-status`, {
+                                headers: headers
                             });
                             const data = await response.json();
                             if (data.success) {
-                                alert('点赞成功！');
-                                renderPalettes('自定义'); // 重新渲染
+                                const isLiked = data.liked;
+                                likeBtn.innerHTML = `${isLiked ? '❤️' : '🤍'} ${palette.likes || 0}`;
+                                likeBtn.style.color = isLiked ? '#ff6b6b' : '#666';
+                                likeBtn.style.borderColor = isLiked ? '#ff6b6b' : '#e0e0e0';
+                            }
+                        } catch (error) {
+                            console.error('检查点赞状态失败:', error);
+                            likeBtn.innerHTML = `🤍 ${palette.likes || 0}`;
+                        }
+                    };
+
+                    checkLikeStatus();
+
+                    likeBtn.onmouseover = () => {
+                        likeBtn.style.background = '#f8f8f8';
+                        likeBtn.style.transform = 'scale(1.05)';
+                    };
+
+                    likeBtn.onmouseout = () => {
+                        likeBtn.style.background = 'white';
+                        likeBtn.style.transform = 'scale(1)';
+                    };
+
+                    likeBtn.onclick = async (e) => {
+                        e.stopPropagation();
+                        try {
+                            const headers = {'Content-Type': 'application/json'};
+                            if (currentUser) {
+                                headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+                            }
+                            const response = await fetch(`${API_BASE}/api/palettes/${palette.id}/like`, {
+                                method: 'POST',
+                                headers: headers
+                            });
+                            const data = await response.json();
+                            if (data.success) {
+                                // 更新点赞状态
+                                palette.likes = data.likes;
+                                const isLiked = data.liked;
+                                likeBtn.innerHTML = `${isLiked ? '❤️' : '🤍'} ${palette.likes}`;
+                                likeBtn.style.color = isLiked ? '#ff6b6b' : '#666';
+                                likeBtn.style.borderColor = isLiked ? '#ff6b6b' : '#e0e0e0';
                             } else {
-                                alert(data.message || '点赞失败');
+                                alert(data.message || '操作失败');
                             }
                         } catch (error) {
                             console.error('点赞失败:', error);
                             alert('网络错误，请稍后重试');
                         }
                     };
-                    info.appendChild(likeBtn);
+
+                    likeContainer.appendChild(likeBtn);
+
+                    metaContainer.appendChild(uploaderInfo);
+                    metaContainer.appendChild(likeContainer);
+
+                    info.appendChild(metaContainer);
                 }
 
                 const codes = document.createElement('div');
@@ -2926,8 +2987,6 @@
                     codes.appendChild(code);
                 });
 
-                info.appendChild(name);
-                info.appendChild(desc);
                 info.appendChild(codes);
 
                 card.appendChild(preview);
