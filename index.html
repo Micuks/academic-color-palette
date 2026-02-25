@@ -2877,6 +2877,39 @@
                     meta.appendChild(uploader);
                     meta.appendChild(likesInfo);
                     desc.appendChild(meta);
+
+                    // 添加点赞按钮
+                    const likeBtn = document.createElement('button');
+                    likeBtn.className = 'like-btn';
+                    likeBtn.style.cssText = 'margin-top: 8px; padding: 6px 12px; background: #ff6b6b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem;';
+                    likeBtn.textContent = '❤️ 点赞';
+                    likeBtn.onclick = async (e) => {
+                        e.stopPropagation();
+                        if (!currentUser) {
+                            alert('请先登录');
+                            return;
+                        }
+                        try {
+                            const response = await fetch(`${API_BASE}/api/palettes/${palette.id}/like`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                }
+                            });
+                            const data = await response.json();
+                            if (data.success) {
+                                alert('点赞成功！');
+                                renderPalettes('自定义'); // 重新渲染
+                            } else {
+                                alert(data.message || '点赞失败');
+                            }
+                        } catch (error) {
+                            console.error('点赞失败:', error);
+                            alert('网络错误，请稍后重试');
+                        }
+                    };
+                    info.appendChild(likeBtn);
                 }
 
                 const codes = document.createElement('div');
