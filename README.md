@@ -190,7 +190,7 @@ MIT License
 
 **共同一作 (Co-first Authors)**
 
-1. **Zemdalk** (S Z)
+1. **Zemdalk**
    - 项目发起人
    - 需求设计与功能规划
    - 用户体验优化
