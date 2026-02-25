@@ -120,7 +120,7 @@ def get_db():
 def send_email(to_email, subject, body):
     """发送邮件"""
     if not SMTP_USERNAME or not SMTP_PASSWORD:
-        print(f"⚠️ SMTP未配置，验证码将打印到控制台: {body}")
+        # SMTP未配置，返回True让调用者知道"发送成功"（实际是开发模式）
         return True
 
     try:
@@ -201,10 +201,19 @@ def send_verification_code():
     '''
 
     if send_email(email, subject, body):
+        # 开发环境：打印验证码到服务器日志
+        if not SMTP_USERNAME:
+            print(f"\n{'='*60}")
+            print(f"📧 邮箱验证码（开发模式）")
+            print(f"{'='*60}")
+            print(f"邮箱: {email}")
+            print(f"验证码: {code}")
+            print(f"有效期: 10分钟")
+            print(f"{'='*60}\n")
+
         return jsonify({
             'success': True,
-            'message': '验证码已发送到邮箱',
-            'code': code if not SMTP_USERNAME else None  # 开发环境返回验证码
+            'message': '验证码已发送到邮箱'
         }), 200
     else:
         return jsonify({'success': False, 'message': '发送验证码失败，请稍后重试'}), 500
