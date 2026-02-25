@@ -125,7 +125,7 @@ def send_email(to_email, subject, body):
 
     try:
         msg = MIMEMultipart()
-        msg['From'] = SMTP_USERNAME
+        msg['From'] = 'palette-noreply@micuks.click'  # 使用别名作为发件人
         msg['To'] = to_email
         msg['Subject'] = subject
 
