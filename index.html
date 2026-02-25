@@ -615,8 +615,8 @@
             background: white;
             border-radius: 20px;
             padding: 40px;
-            max-width: 1200px;
-            width: 90%;
+            max-width: 1600px;
+            width: 95%;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -651,7 +651,7 @@
 
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
         }
 
@@ -1346,16 +1346,346 @@
                 flex-direction: column;
             }
         }
+
+        /* 用户认证按钮 */
+        .auth-btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: 2px solid #FFB6C1;
+            background: white;
+            color: #FFB6C1;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .auth-btn:hover {
+            background: #FFB6C1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
+        }
+
+        .auth-btn.register-btn {
+            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            color: white;
+            border: none;
+        }
+
+        .auth-btn.register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
+        }
+
+        /* 用户名按钮 */
+        .user-name-btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #FFB6C1;
+            background: white;
+            color: #5D5D5D;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-name-btn:hover {
+            background: #FFF0F5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
+        }
+
+        /* 用户下拉菜单 */
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            overflow: hidden;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.2s ease-in;
+        }
+
+        @keyframes dropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            padding: 15px 20px;
+            color: #5D5D5D;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background: #FFF0F5;
+            color: #FFB6C1;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #F0F0F0;
+            margin: 5px 0;
+        }
+
+        .logout-item {
+            color: #FF6B6B;
+        }
+
+        .logout-item:hover {
+            background: #FFF0F0;
+            color: #FF6B6B;
+        }
+
+        /* 模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: modalFadeIn 0.3s ease-in;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #FFB6C1;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #5D5D5D;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .modal-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .modal-submit-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
+        }
+
+        .modal-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .modal-switch a {
+            color: #FFB6C1;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* 管理面板 */
+        .admin-panel {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .admin-item {
+            background: #FAFAFA;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            border: 2px solid #F0F0F0;
+            transition: all 0.3s;
+        }
+
+        .admin-item:hover {
+            border-color: #FFB6C1;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+        }
+
+        .admin-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .admin-item-title {
+            font-weight: 600;
+            color: #5D5D5D;
+            font-size: 1.1rem;
+        }
+
+        .admin-item-meta {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .admin-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-action-btn {
+            padding: 8px 15px;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .admin-action-btn.edit {
+            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            color: white;
+        }
+
+        .admin-action-btn.delete {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .admin-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            #userArea {
+                position: static !important;
+                margin-top: 20px;
+                justify-content: center;
+            }
+
+            .user-dropdown {
+                right: -50px;
+            }
+
+            .modal-content {
+                padding: 25px;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header style="position: relative;">
             <h1>🎨 学术配色推荐器</h1>
             <p class="subtitle">
                 Academic Color Palette Generator
                 <span class="help-icon" onclick="openHelpModal()" title="使用说明">?</span>
             </p>
+            
+            <!-- 右上角用户区域 -->
+            <div id="userArea" style="position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; align-items: center;">
+                <!-- 未登录状态 -->
+                <div id="authButtons" style="display: flex; gap: 10px;">
+                    <button class="auth-btn" onclick="openLoginModal()">登录</button>
+                    <button class="auth-btn register-btn" onclick="openRegisterModal()">注册</button>
+                </div>
+                
+                <!-- 已登录状态 -->
+                <div id="userMenu" style="display: none; position: relative;">
+                    <button class="user-name-btn" onclick="toggleUserDropdown()">
+                        <span id="displayUsername">用户名</span>
+                        <span id="userRoleBadge" style="margin-left: 8px; padding: 2px 8px; background: #FFB6C1; color: white; border-radius: 10px; font-size: 0.8rem;"></span>
+                        <span style="margin-left: 5px;">▼</span>
+                    </button>
+                    <div id="userDropdown" class="user-dropdown" style="display: none;">
+                        <div class="dropdown-item" onclick="openMyPalettesModal()">🎨 我的配色</div>
+                        <div id="adminMenuItems" style="display: none;">
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="openAdminPalettesModal()">📋 管理所有配色</div>
+                            <div class="dropdown-item" onclick="openAdminUsersModal()">👥 管理所有用户</div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item logout-item" onclick="logout()">🚪 退出登录</div>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <!-- 标签导航 -->
@@ -1392,74 +1722,11 @@
                     <!-- 配色卡片由 JS 生成 -->
                 </div>
 
-                <!-- 用户登录/注册区域 -->
-                <div id="authSection" style="margin-top: 40px; padding: 30px; background: #FAFAFA; border-radius: 20px; border: 2px solid #F0F0F0;">
-                    <div id="loginForm">
-                        <h3 style="color: #5D5D5D; margin-bottom: 20px; font-size: 1.3rem;">🔐 用户登录 / 注册</h3>
-                        <div class="custom-palette-form">
-                            <div class="input-group">
-                                <label class="input-label">用户名</label>
-                                <input type="text" class="hex-input" id="username" placeholder="输入用户名">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">密码</label>
-                                <input type="password" class="hex-input" id="password" placeholder="输入密码">
-                            </div>
-                            <div style="display: flex; gap: 15px; margin-top: 20px;">
-                                <button class="generate-btn" onclick="login()" style="flex: 1;">登录</button>
-                                <button class="generate-btn" onclick="register()" style="flex: 1; background: linear-gradient(135deg, #98D8C8 0%, #7A8B9A 100%);">注册</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="userPanel" style="display: none;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <div>
-                                <span style="font-size: 1.2rem; color: #5D5D5D; font-weight: 600;">👤 欢迎，<span id="currentUser"></span></span>
-                                <span id="userRole" style="margin-left: 10px; padding: 4px 12px; background: #FFB6C1; color: white; border-radius: 15px; font-size: 0.85rem;"></span>
-                            </div>
-                            <button class="action-btn delete" onclick="logout()" style="padding: 8px 20px;">退出登录</button>
-                        </div>
-                        
-                        <!-- 上传配色表单 -->
-                        <div id="uploadSection" style="margin-top: 20px;">
-                            <h4 style="color: #5D5D5D; margin-bottom: 15px; font-size: 1.1rem;">📤 上传新配色</h4>
-                            <div class="custom-palette-form">
-                                <div class="input-group">
-                                    <label class="input-label">配色名称</label>
-                                    <input type="text" class="hex-input" id="uploadName" placeholder="例如：我的梦幻配色">
-                                </div>
-                                <div class="input-group">
-                                    <label class="input-label">配色描述</label>
-                                    <textarea class="tool-input" id="uploadDescription" placeholder="描述这个配色的特点和适用场景" style="height: 80px;"></textarea>
-                                </div>
-                                <div class="input-group">
-                                    <label class="input-label">配色类型</label>
-                                    <select class="palette-type-select" id="uploadType">
-                                        <option value="类似色">类似色</option>
-                                        <option value="互补色">互补色</option>
-                                        <option value="三角配色">三角配色</option>
-                                        <option value="四角配色">四角配色</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label class="input-label">颜色列表 (HEX格式，用逗号分隔)</label>
-                                    <input type="text" class="hex-input" id="uploadColors" placeholder="#FFB6C1, #DDA0DD, #87CEEB, #98D8C8">
-                                    <div style="font-size: 0.85rem; color: #888; margin-top: 5px;">
-                                        示例格式: #FFB6C1, #DDA0DD, #87CEEB
-                                    </div>
-                                </div>
-                                <button class="generate-btn" onclick="uploadPalette()" style="width: 100%; margin-top: 20px;">📤 上传配色</button>
-                            </div>
-                        </div>
-
-                        <!-- 管理员后台 -->
-                        <div id="adminPanel" style="display: none; margin-top: 30px; padding: 20px; background: white; border-radius: 15px; border: 2px solid #FFE5EC;">
-                            <h4 style="color: #5D5D5D; margin-bottom: 15px; font-size: 1.1rem;">👑 管理员后台</h4>
-                            <div id="adminPalettesList">
-                                <!-- 管理员管理列表由 JS 生成 -->
-                            </div>
-                        </div>
-                    </div>
+                <!-- 上传配色按钮（仅登录后显示） -->
+                <div id="uploadPaletteBtn" style="display: none; margin-top: 40px; text-align: center;">
+                    <button class="generate-btn" onclick="openUploadPaletteModal()" style="padding: 15px 40px; font-size: 1.1rem;">
+                        📤 上传新配色
+                    </button>
                 </div>
             </section>
         </div>
@@ -1563,9 +1830,125 @@
         </footer>
     </div>
 
+    <div class="copied-toast" id="copiedToast">已复制到剪贴板！</div>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 700px; width: 90%;">
+            <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            <h2 class="modal-title">🔐 用户登录</h2>
+            <div class="modal-form">
+                <div class="input-group">
+                    <label class="input-label">用户名或邮箱</label>
+                    <input type="text" class="hex-input" id="loginUsername">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">密码</label>
+                    <input type="password" class="hex-input" id="loginPassword">
+                </div>
+                <button class="modal-submit-btn" onclick="handleLogin()">登录</button>
+            </div>
+            <div class="modal-switch">
+                还没有账号？<a onclick="switchToRegister()">立即注册</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 900px; width: 90%;">
+            <button class="modal-close" onclick="closeRegisterModal()">&times;</button>
+            <h2 class="modal-title">📝 用户注册</h2>
+            <div class="modal-form">
+                <div class="input-group">
+                    <label class="input-label">用户名（至少3个字符）</label>
+                    <input type="text" class="hex-input" id="registerUsername">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">邮箱（必填）</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="email" class="hex-input" id="registerEmail" required style="flex: 1; min-width: 0;">
+                        <button class="modal-submit-btn" onclick="handleSendCode()" id="sendCodeBtn" style="white-space: nowrap; padding: 10px 20px; flex-shrink: 0; width: 180px;">发送验证码</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">验证码（6位数字）</label>
+                    <input type="text" class="hex-input" id="registerCode" maxlength="6" placeholder="请输入邮箱验证码">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">密码（至少6个字符）</label>
+                    <input type="password" class="hex-input" id="registerPassword">
+                </div>
+                <button class="modal-submit-btn" onclick="handleRegister()">注册</button>
+            </div>
+            <div class="modal-switch">
+                已有账号？<a onclick="switchToLogin()">立即登录</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 我的配色模态框 -->
+    <div id="myPalettesModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 1200px; width: 90%;">
+            <button class="modal-close" onclick="closeMyPalettesModal()">&times;</button>
+            <h2 class="modal-title">🎨 我的配色</h2>
+            <div id="myPalettesList" class="admin-panel">
+                <!-- 由JS生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理员：管理配色模态框 -->
+    <div id="adminPalettesModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 1200px; width: 90%;">
+            <button class="modal-close" onclick="closeAdminPalettesModal()">&times;</button>
+            <h2 class="modal-title">📋 管理所有配色</h2>
+            <div id="adminPalettesList" class="admin-panel">
+                <!-- 由JS生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理员：管理用户模态框 -->
+    <div id="adminUsersModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+            <button class="modal-close" onclick="closeAdminUsersModal()">&times;</button>
+            <h2 class="modal-title">👥 管理所有用户</h2>
+            <div id="adminUsersList" class="admin-panel">
+                <!-- 由JS生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 上传配色模态框 -->
+    <div id="uploadPaletteModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeUploadPaletteModal()">&times;</button>
+            <h2 class="modal-title">📤 上传新配色</h2>
+            <div class="modal-form">
+                <div class="input-group">
+                    <label class="input-label">配色名称</label>
+                    <input type="text" class="hex-input" id="uploadName">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">配色描述</label>
+                    <textarea class="tool-input" id="uploadDescription" style="height: 80px;"></textarea>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">颜色列表 (HEX格式，用逗号分隔)</label>
+                    <input type="text" class="hex-input" id="uploadColors">
+                    <div style="font-size: 0.85rem; color: #888; margin-top: 5px;">
+                        示例格式: #FFB6C1, #DDA0DD, #87CEEB
+                    </div>
+                </div>
+                <button class="modal-submit-btn" onclick="handleUploadPalette()">📤 上传配色</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 模态框 -->
     <div class="modal" id="chartModal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 1400px; width: 95%;">
             <button class="modal-close" onclick="closeModal()">&times;</button>
             <h2 class="modal-title" id="modalTitle">配色效果预览</h2>
             <div class="charts-grid" id="chartsGrid">
@@ -2399,12 +2782,54 @@
         }
 
         // 渲染配色库
-        function renderPalettes(filterType = '三角配色') {
+        async function renderPalettes(filterType = '三角配色') {
             const grid = document.getElementById('paletteGrid');
-            grid.innerHTML = ''; // 清空现有内容
+            grid.innerHTML = '<div style="text-align: center; padding: 40px;">加载中...</div>'; // 显示加载中
 
-            // 筛选配色方案
-            const filteredPalettes = macaronPalettes.filter(palette => palette.type === filterType);
+            let filteredPalettes = [];
+
+            if (filterType === '自定义') {
+                // 从API获取自定义配色
+                try {
+                    const response = await fetch(`${API_BASE}/api/palettes?type=${encodeURIComponent('自定义')}`);
+                    const data = await response.json();
+                    if (data.success) {
+                        filteredPalettes = data.palettes.map(p => ({
+                            name: p.name,
+                            description: p.description || '用户上传的配色方案',
+                            type: p.type,
+                            colors: p.colors,
+                            userId: p.userId,
+                            username: p.username,
+                            likes: p.likes
+                        }));
+                    } else {
+                        grid.innerHTML = '<div style="text-align: center; padding: 40px; color: #888;">加载失败，请刷新重试</div>';
+                        return;
+                    }
+                } catch (error) {
+                    console.error('获取自定义配色失败:', error);
+                    grid.innerHTML = '<div style="text-align: center; padding: 40px; color: #888;">网络错误，请稍后重试</div>';
+                    return;
+                }
+            } else {
+                // 从本地数据筛选预定义配色
+                filteredPalettes = macaronPalettes.filter(palette => palette.type === filterType);
+            }
+
+            // 清空内容重新渲染
+            grid.innerHTML = '';
+
+            // 如果没有配色方案
+            if (filteredPalettes.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #888;">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
+                        <div>暂无${filterType}配色方案</div>
+                    </div>
+                `;
+                return;
+            }
 
             filteredPalettes.forEach((palette, index) => {
                 const card = document.createElement('div');
@@ -2469,7 +2894,8 @@
             // 更新按钮状态
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.textContent === type) {
+                // 处理自定义按钮的特殊情况（带emoji）
+                if (btn.textContent === type || btn.textContent.includes(type)) {
                     btn.classList.add('active');
                 }
             });
@@ -3489,74 +3915,156 @@
             }
         }
 
+        // 用户认证系统
+        let currentUser = null;
+        const API_BASE = '';  // 使用相对路径，通过Caddy代理
+
         // 初始化
         renderPalettes('三角配色'); // 默认显示三角配色
         updateLightness();
         renderDailyPalette(); // 渲染每日配色
         checkAuthStatus(); // 检查登录状态
 
-        // 用户认证系统
-        let currentUser = null;
-
-        // 检查登录状态
-        function checkAuthStatus() {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                showUserPanel();
-            }
+        // 模态框控制函数
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
         }
 
-        // 用户注册
-        async function register() {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
 
-            if (!username || !password) {
-                showToast('请输入用户名和密码');
-                return;
+        function openRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerCode').value = '';
+            document.getElementById('registerPassword').value = '';
+            // 重置验证码按钮
+            if (window.codeCountdown) {
+                clearInterval(window.codeCountdown);
             }
+            const sendCodeBtn = document.getElementById('sendCodeBtn');
+            sendCodeBtn.textContent = '发送验证码';
+            sendCodeBtn.disabled = false;
+        }
+
+        function switchToRegister() {
+            closeLoginModal();
+            openRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            openLoginModal();
+        }
+
+        function openMyPalettesModal() {
+            closeUserDropdown();
+            document.getElementById('myPalettesModal').style.display = 'flex';
+            loadMyPalettes();
+        }
+
+        function closeMyPalettesModal() {
+            document.getElementById('myPalettesModal').style.display = 'none';
+        }
+
+        function openAdminPalettesModal() {
+            closeUserDropdown();
+            document.getElementById('adminPalettesModal').style.display = 'flex';
+            loadAdminPalettes();
+        }
+
+        function closeAdminPalettesModal() {
+            document.getElementById('adminPalettesModal').style.display = 'none';
+        }
+
+        function openAdminUsersModal() {
+            closeUserDropdown();
+            document.getElementById('adminUsersModal').style.display = 'flex';
+            loadAdminUsers();
+        }
+
+        function closeAdminUsersModal() {
+            document.getElementById('adminUsersModal').style.display = 'none';
+        }
+
+        // 用户下拉菜单
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function closeUserDropdown() {
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+
+        // 点击外部关闭下拉菜单
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#userMenu')) {
+                closeUserDropdown();
+            }
+        });
+
+        // 检查登录状态
+        async function checkAuthStatus() {
+            const token = localStorage.getItem('access_token');
+            if (!token) return;
 
             try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({username, password})
+                const response = await fetch(`${API_BASE}/api/auth/me`, {
+                    headers: {'Authorization': `Bearer ${token}`}
                 });
-
                 const data = await response.json();
 
                 if (data.success) {
-                    showToast('注册成功！请登录');
+                    currentUser = data.user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showUserPanel();
                 } else {
-                    showToast(data.message || '注册失败');
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('currentUser');
                 }
             } catch (error) {
-                // 离线模式：使用本地存储
-                const users = JSON.parse(localStorage.getItem('users') || '[]');
-                if (users.find(u => u.username === username)) {
-                    showToast('用户名已存在');
-                    return;
+                console.error('检查登录状态失败:', error);
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    currentUser = JSON.parse(savedUser);
+                    showUserPanel();
                 }
-
-                const newUser = {
-                    id: Date.now(),
-                    username: username,
-                    password: password,
-                    role: username === 'admin' ? 'admin' : 'user',
-                    createdAt: new Date().toISOString()
-                };
-
-                users.push(newUser);
-                localStorage.setItem('users', JSON.stringify(users));
-                showToast('注册成功！请登录');
             }
         }
 
-        // 用户登录
-        async function login() {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+        // 显示用户面板
+        function showUserPanel() {
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('userMenu').style.display = 'block';
+            document.getElementById('displayUsername').textContent = currentUser.username;
+            document.getElementById('userRoleBadge').textContent = currentUser.role === 'admin' ? '管理员' : '用户';
+
+            // 显示管理员菜单项
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminMenuItems').style.display = 'block';
+            }
+        }
+
+        // 隐藏用户面板
+        function hideUserPanel() {
+            document.getElementById('authButtons').style.display = 'flex';
+            document.getElementById('userMenu').style.display = 'none';
+            document.getElementById('adminMenuItems').style.display = 'none';
+        }
+
+        // 处理登录
+        async function handleLogin() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
 
             if (!username || !password) {
                 showToast('请输入用户名和密码');
@@ -3564,7 +4072,7 @@
             }
 
             try {
-                const response = await fetch('/api/auth/login', {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({username, password})
@@ -3574,61 +4082,358 @@
 
                 if (data.success) {
                     currentUser = data.user;
+                    localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    closeLoginModal();
                     showUserPanel();
                     showToast(`欢迎回来，${username}！`);
                 } else {
                     showToast(data.message || '登录失败');
                 }
             } catch (error) {
-                // 离线模式：使用本地存储
-                const users = JSON.parse(localStorage.getItem('users') || '[]');
-                const user = users.find(u => u.username === username && u.password === password);
+                console.error('登录失败:', error);
+                showToast('网络错误，请稍后重试');
+            }
+        }
 
-                if (user) {
-                    currentUser = user;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    showUserPanel();
-                    showToast(`欢迎回来，${username}！`);
+        // 发送验证码
+        async function handleSendCode() {
+            const email = document.getElementById('registerEmail').value.trim();
+            
+            if (!email) {
+                showToast('请输入邮箱');
+                return;
+            }
+            
+            // 验证邮箱格式
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email)) {
+                showToast('邮箱格式不正确');
+                return;
+            }
+            
+            const sendCodeBtn = document.getElementById('sendCodeBtn');
+            sendCodeBtn.disabled = true;
+            sendCodeBtn.textContent = '发送中...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/send-verification`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('验证码已发送到邮箱');
+                    
+                    // 开发环境显示验证码
+                    if (data.code) {
+                        showToast(`验证码: ${data.code}`, 10000);
+                    }
+                    
+                    // 开始倒计时
+                    let countdown = 60;
+                    sendCodeBtn.textContent = `${countdown}秒后重发`;
+                    
+                    window.codeCountdown = setInterval(() => {
+                        countdown--;
+                        if (countdown <= 0) {
+                            clearInterval(window.codeCountdown);
+                            sendCodeBtn.textContent = '发送验证码';
+                            sendCodeBtn.disabled = false;
+                        } else {
+                            sendCodeBtn.textContent = `${countdown}秒后重发`;
+                        }
+                    }, 1000);
                 } else {
-                    showToast('用户名或密码错误');
+                    showToast(data.message || '发送验证码失败');
+                    sendCodeBtn.textContent = '发送验证码';
+                    sendCodeBtn.disabled = false;
                 }
+            } catch (error) {
+                console.error('发送验证码失败:', error);
+                showToast('网络错误，请稍后重试');
+                sendCodeBtn.textContent = '发送验证码';
+                sendCodeBtn.disabled = false;
+            }
+        }
+        
+        // 处理注册
+        async function handleRegister() {
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const code = document.getElementById('registerCode').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+
+            if (!username || !email || !code || !password) {
+                showToast('请填写完整信息');
+                return;
+            }
+
+            if (username.length < 3) {
+                showToast('用户名至少3个字符');
+                return;
+            }
+
+            // 验证邮箱格式
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email)) {
+                showToast('邮箱格式不正确');
+                return;
+            }
+
+            if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+                showToast('验证码必须是6位数字');
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('密码至少6个字符');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, email, verificationCode: code, password})
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentUser = data.user;
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    closeRegisterModal();
+                    showUserPanel();
+                    showToast(`注册成功！欢迎，${username}！`);
+                } else {
+                    showToast(data.message || '注册失败');
+                }
+            } catch (error) {
+                console.error('注册失败:', error);
+                showToast('网络错误，请稍后重试');
             }
         }
 
         // 退出登录
         function logout() {
+            closeUserDropdown();
             currentUser = null;
+            localStorage.removeItem('access_token');
             localStorage.removeItem('currentUser');
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('userPanel').style.display = 'none';
+            hideUserPanel();
             showToast('已退出登录');
         }
 
-        // 显示用户面板
-        function showUserPanel() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('userPanel').style.display = 'block';
-            document.getElementById('currentUser').textContent = currentUser.username;
-            document.getElementById('userRole').textContent = currentUser.role === 'admin' ? '管理员' : '普通用户';
+        // 加载我的配色
+        async function loadMyPalettes() {
+            const token = localStorage.getItem('access_token');
+            const container = document.getElementById('myPalettesList');
 
-            // 如果是管理员，显示管理面板
-            if (currentUser.role === 'admin') {
-                document.getElementById('adminPanel').style.display = 'block';
-                renderAdminPanel();
+            try {
+                const response = await fetch(`${API_BASE}/api/palettes?type=${encodeURIComponent('自定义')}`, {
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    const myPalettes = data.palettes.filter(p => p.userId === currentUser.id);
+
+                    if (myPalettes.length === 0) {
+                        container.innerHTML = `
+                            <div style="text-align: center; padding: 40px; color: #888;">
+                                <div style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
+                                <div>还没有上传配色</div>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    container.innerHTML = myPalettes.map(palette => `
+                        <div class="admin-item">
+                            <div class="admin-item-header">
+                                <div>
+                                    <div class="admin-item-title">${palette.name}</div>
+                                    <div class="admin-item-meta">
+                                        ${palette.type} | ❤️ ${palette.likes} | ${new Date(palette.createdAt).toLocaleDateString('zh-CN')}
+                                    </div>
+                                </div>
+                                <div class="admin-item-actions">
+                                    <button class="admin-action-btn delete" onclick="deleteMyPalette(${palette.id})">删除</button>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                ${palette.colors.map(color => `
+                                    <div style="flex: 1; height: 60px; background: ${color}; border-radius: 10px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px;">
+                                        <span style="color: white; font-size: 0.8rem; font-family: monospace; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">${color}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('加载我的配色失败:', error);
+                container.innerHTML = '<p style="color: #FF6B6B; text-align: center;">加载失败，请稍后重试</p>';
             }
         }
 
-        // 上传配色
-        async function uploadPalette() {
+        // 删除我的配色
+        async function deleteMyPalette(paletteId) {
+            if (!confirm('确定要删除这个配色吗？')) return;
+
+            const token = localStorage.getItem('access_token');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/palettes/${paletteId}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('删除成功');
+                    loadMyPalettes();
+                    // 刷新配色库
+                    filterPalettes('自定义');
+                } else {
+                    showToast(data.message || '删除失败');
+                }
+            } catch (error) {
+                console.error('删除失败:', error);
+                showToast('网络错误，请稍后重试');
+            }
+        }
+
+        // 管理员：加载所有配色
+        async function loadAdminPalettes() {
+            const token = localStorage.getItem('access_token');
+            const container = document.getElementById('adminPalettesList');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/palettes`, {
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    if (data.palettes.length === 0) {
+                        container.innerHTML = `
+                            <div style="text-align: center; padding: 40px; color: #888;">
+                                <div style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
+                                <div>还没有配色</div>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    container.innerHTML = data.palettes.map(palette => `
+                        <div class="admin-item">
+                            <div class="admin-item-header">
+                                <div>
+                                    <div class="admin-item-title">${palette.name}</div>
+                                    <div class="admin-item-meta">
+                                        作者: ${palette.username} | ${palette.type} | ❤️ ${palette.likes} | ${new Date(palette.createdAt).toLocaleDateString('zh-CN')}
+                                    </div>
+                                </div>
+                                <div class="admin-item-actions">
+                                    <button class="admin-action-btn delete" onclick="adminDeletePalette(${palette.id})">删除</button>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                ${palette.colors.map(color => `
+                                    <div style="flex: 1; height: 60px; background: ${color}; border-radius: 10px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px;">
+                                        <span style="color: white; font-size: 0.8rem; font-family: monospace; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">${color}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="color: #FF6B6B; text-align: center;">没有权限</p>';
+                }
+            } catch (error) {
+                console.error('加载配色失败:', error);
+                container.innerHTML = '<p style="color: #FF6B6B; text-align: center;">加载失败，请稍后重试</p>';
+            }
+        }
+
+        // 管理员：删除配色
+        async function adminDeletePalette(paletteId) {
+            if (!confirm('确定要删除这个配色吗？')) return;
+
+            const token = localStorage.getItem('access_token');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/palettes/${paletteId}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('删除成功');
+                    loadAdminPalettes();
+                    filterPalettes('自定义');
+                } else {
+                    showToast(data.message || '删除失败');
+                }
+            } catch (error) {
+                console.error('删除失败:', error);
+                showToast('网络错误，请稍后重试');
+            }
+        }
+
+        // 管理员：加载所有用户（需要后端API支持）
+        async function loadAdminUsers() {
+            const container = document.getElementById('adminUsersList');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #888;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">👥</div>
+                    <div>用户管理功能开发中...</div>
+                    <div style="font-size: 0.9rem; margin-top: 10px;">需要后端API支持</div>
+                </div>
+            `;
+        }
+
+        // 用户注册（保留原函数兼容性）
+        async function register() {
+            await handleRegister();
+        }
+
+        // 用户登录（保留原函数兼容性）
+        async function login() {
+            await handleLogin();
+        }
+
+        // 上传配色模态框
+        function openUploadPaletteModal() {
             if (!currentUser) {
                 showToast('请先登录');
+                openLoginModal();
                 return;
             }
+            document.getElementById('uploadPaletteModal').style.display = 'flex';
+        }
 
+        function closeUploadPaletteModal() {
+            document.getElementById('uploadPaletteModal').style.display = 'none';
+            document.getElementById('uploadName').value = '';
+            document.getElementById('uploadDescription').value = '';
+            document.getElementById('uploadColors').value = '';
+        }
+
+        // 处理上传配色
+        async function handleUploadPalette() {
             const name = document.getElementById('uploadName').value.trim();
             const description = document.getElementById('uploadDescription').value.trim();
-            const type = document.getElementById('uploadType').value;
+            const type = '自定义';  // 默认类型为自定义
             const colorsInput = document.getElementById('uploadColors').value.trim();
 
             if (!name || !colorsInput) {
@@ -3645,266 +4450,56 @@
                 return;
             }
 
-            const palette = {
-                id: Date.now(),
-                name: name,
-                description: description,
-                type: type,
-                colors: colors,
-                userId: currentUser.id,
-                username: currentUser.username,
-                likes: 0,
-                likedBy: [],
-                createdAt: new Date().toISOString()
-            };
+            const token = localStorage.getItem('access_token');
 
             try {
-                const response = await fetch('/api/palettes/upload', {
+                const response = await fetch(`${API_BASE}/api/palettes/upload`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(palette)
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({name, description, type, colors})
                 });
 
                 const data = await response.json();
 
                 if (data.success) {
                     showToast('上传成功！');
-                    // 清空表单
-                    document.getElementById('uploadName').value = '';
-                    document.getElementById('uploadDescription').value = '';
-                    document.getElementById('uploadColors').value = '';
+                    closeUploadPaletteModal();
                     // 刷新配色库
                     filterPalettes('自定义');
                 } else {
                     showToast(data.message || '上传失败');
                 }
             } catch (error) {
-                // 离线模式：使用本地存储
-                const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
-                customPalettes.push(palette);
-                localStorage.setItem('customPalettes', JSON.stringify(customPalettes));
-
-                showToast('上传成功！');
-                // 清空表单
-                document.getElementById('uploadName').value = '';
-                document.getElementById('uploadDescription').value = '';
-                document.getElementById('uploadColors').value = '';
-                // 刷新配色库
-                filterPalettes('自定义');
+                console.error('上传失败:', error);
+                showToast('网络错误，请稍后重试');
             }
         }
 
-        // 喜欢配色
-        function likePalette(paletteId) {
-            const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
-            const palette = customPalettes.find(p => p.id === paletteId);
-
-            if (!palette) return;
-
-            // 检查是否已经喜欢过
-            const userId = currentUser ? currentUser.id : 'guest_' + Date.now();
-            if (palette.likedBy.includes(userId)) {
-                showToast('你已经喜欢过了');
-                return;
-            }
-
-            palette.likes++;
-            palette.likedBy.push(userId);
-            localStorage.setItem('customPalettes', JSON.stringify(customPalettes));
-
-            // 刷新显示
-            filterPalettes('自定义');
-            showToast('已喜欢 ❤️');
-        }
-
-        // 排序自定义配色
-        let currentSort = 'time';
-
-        function sortCustomPalettes(sortType) {
-            currentSort = sortType;
-
-            // 更新按钮状态
-            document.getElementById('sort-time').classList.toggle('active', sortType === 'time');
-            document.getElementById('sort-likes').classList.toggle('active', sortType === 'likes');
-
-            // 重新渲染
-            filterPalettes('自定义');
-        }
-
-        // 渲染管理员面板
-        function renderAdminPanel() {
-            const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
-
-            const html = `
-                <div style="margin-bottom: 15px; color: #888;">
-                    共 ${customPalettes.length} 个自定义配色
-                </div>
-                <div style="max-height: 400px; overflow-y: auto;">
-                    ${customPalettes.map(palette => `
-                        <div style="background: #FAFAFA; padding: 15px; margin-bottom: 10px; border-radius: 10px; border: 2px solid #F0F0F0;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-weight: 600; color: #5D5D5D;">${palette.name}</div>
-                                    <div style="font-size: 0.85rem; color: #888;">作者: ${palette.username} | ❤️ ${palette.likes}</div>
-                                </div>
-                                <button class="action-btn delete" onclick="adminDeletePalette(${palette.id})" style="padding: 5px 15px;">删除</button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            document.getElementById('adminPalettesList').innerHTML = html;
-        }
-
-        // 管理员删除配色
-        function adminDeletePalette(paletteId) {
-            if (!confirm('确定要删除这个配色吗？')) return;
-
-            const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
-            const index = customPalettes.findIndex(p => p.id === paletteId);
-
-            if (index !== -1) {
-                customPalettes.splice(index, 1);
-                localStorage.setItem('customPalettes', JSON.stringify(customPalettes));
-                renderAdminPanel();
-                filterPalettes('自定义');
-                showToast('已删除');
-            }
-        }
-
-        // 修改筛选配色函数，支持自定义配色
-        function filterPalettes(type) {
-            // 更新按钮状态
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent.includes(type) || btn.textContent === type) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // 显示/隐藏排序选项
-            document.getElementById('customSortOptions').style.display = type === '自定义' ? 'block' : 'none';
-
-            // 重新渲染配色方案
-            renderPalettes(type);
-        }
-
-        // 修改渲染配色库函数，支持自定义配色
-        function renderPalettes(filterType = '三角配色') {
-            const grid = document.getElementById('paletteGrid');
-            grid.innerHTML = '';
-
-            let filteredPalettes = [];
-
-            if (filterType === '自定义') {
-                // 渲染自定义配色
-                const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
-
-                // 排序
-                if (currentSort === 'time') {
-                    customPalettes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                } else if (currentSort === 'likes') {
-                    customPalettes.sort((a, b) => b.likes - a.likes);
-                }
-
-                filteredPalettes = customPalettes;
-
-                if (filteredPalettes.length === 0) {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #888;">
-                            <div style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
-                            <div style="font-size: 1.2rem; margin-bottom: 10px;">还没有自定义配色</div>
-                            <div style="font-size: 0.9rem;">登录后上传你的第一个配色吧！</div>
-                        </div>
-                    `;
-                    return;
-                }
+        // 显示/隐藏上传按钮
+        function updateUploadButton() {
+            const uploadBtn = document.getElementById('uploadPaletteBtn');
+            if (currentUser) {
+                uploadBtn.style.display = 'block';
             } else {
-                // 渲染系统配色
-                filteredPalettes = macaronPalettes.filter(palette => palette.type === filterType);
+                uploadBtn.style.display = 'none';
             }
-
-            filteredPalettes.forEach((palette, index) => {
-                const card = document.createElement('div');
-                card.className = 'palette-card';
-                card.style.cursor = 'pointer';
-
-                const preview = document.createElement('div');
-                preview.className = 'color-preview';
-
-                palette.colors.forEach(color => {
-                    const block = document.createElement('div');
-                    block.className = 'color-block';
-                    block.style.backgroundColor = color;
-                    block.onclick = (e) => {
-                        e.stopPropagation();
-                        copyToClipboard(color);
-                    };
-                    preview.appendChild(block);
-                });
-
-                const info = document.createElement('div');
-                info.className = 'palette-info';
-
-                const name = document.createElement('div');
-                name.className = 'palette-name';
-                name.textContent = palette.name;
-
-                const desc = document.createElement('div');
-                desc.className = 'palette-description';
-                desc.textContent = `${palette.description} (${palette.type})`;
-
-                const codes = document.createElement('div');
-                codes.className = 'color-codes';
-
-                palette.colors.forEach(color => {
-                    const code = document.createElement('span');
-                    code.className = 'color-code';
-                    code.textContent = color;
-                    code.onclick = (e) => {
-                        e.stopPropagation();
-                        copyToClipboard(color);
-                    };
-                    codes.appendChild(code);
-                });
-
-                info.appendChild(name);
-                info.appendChild(desc);
-                info.appendChild(codes);
-
-                // 如果是自定义配色，添加作者信息和喜欢按钮
-                if (filterType === '自定义') {
-                    const metaInfo = document.createElement('div');
-                    metaInfo.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 2px solid #F0F0F0;';
-
-                    const authorInfo = document.createElement('div');
-                    authorInfo.style.cssText = 'font-size: 0.85rem; color: #888;';
-                    authorInfo.innerHTML = `👤 ${palette.username} | ${new Date(palette.createdAt).toLocaleDateString('zh-CN')}`;
-
-                    const likeBtn = document.createElement('button');
-                    likeBtn.className = 'action-btn edit';
-                    likeBtn.style.cssText = 'padding: 5px 15px; font-size: 0.85rem;';
-                    likeBtn.innerHTML = `❤️ ${palette.likes}`;
-                    likeBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        likePalette(palette.id);
-                    };
-
-                    metaInfo.appendChild(authorInfo);
-                    metaInfo.appendChild(likeBtn);
-                    info.appendChild(metaInfo);
-                }
-
-                card.appendChild(preview);
-                card.appendChild(info);
-
-                // 点击卡片打开图表预览
-                card.onclick = () => openChartModal(palette);
-
-                grid.appendChild(card);
-            });
         }
+
+        // 修改showUserPanel和hideUserPanel以更新上传按钮
+        const originalShowUserPanel = showUserPanel;
+        showUserPanel = function() {
+            originalShowUserPanel();
+            updateUploadButton();
+        };
+
+        const originalHideUserPanel = hideUserPanel;
+        hideUserPanel = function() {
+            originalHideUserPanel();
+            updateUploadButton();
+        };
     </script>
 </body>
 </html>
