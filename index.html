@@ -3013,6 +3013,12 @@
                 }
             });
 
+            // 显示/隐藏排序选项（仅自定义配色显示）
+            const sortOptions = document.getElementById('customSortOptions');
+            if (sortOptions) {
+                sortOptions.style.display = (type === '自定义') ? 'block' : 'none';
+            }
+
             // 获取当前排序方式
             const sortSelect = document.getElementById('sortSelect');
             const sortBy = sortSelect ? sortSelect.value : 'time';
@@ -3032,6 +3038,21 @@
 
             // 重新渲染配色方案
             renderPalettes(filterType, sortBy);
+        }
+
+        // 自定义配色排序
+        function sortCustomPalettes(sortBy) {
+            // 更新排序按钮状态
+            document.querySelectorAll('#customSortOptions .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeSortBtn = document.getElementById(`sort-${sortBy}`);
+            if (activeSortBtn) {
+                activeSortBtn.classList.add('active');
+            }
+
+            // 重新渲染配色方案
+            renderPalettes('自定义', sortBy);
         }
 
         // HEX 转 HSL
