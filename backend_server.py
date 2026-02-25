@@ -131,7 +131,9 @@ def send_email(to_email, subject, body):
 
         msg.attach(MIMEText(body, 'html', 'utf-8'))
 
-        server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
+        # Gmail使用SMTP + STARTTLS（端口587）
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()  # 开启TLS加密
         server.login(SMTP_USERNAME, SMTP_PASSWORD)
         server.send_message(msg)
         server.quit()
