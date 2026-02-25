@@ -511,8 +511,38 @@ def get_palettes():
         'palettes': result
     }), 200
 
+@app.route('/api/palettes/<int:palette_id>/like-status', methods=['GET'])
+def get_like_status(palette_id):
+    """检查点赞状态"""
+    # 获取用户ID（如果已登录）
+    user_id = None
+    try:
+        user_id = get_jwt_identity()
+    except:
+        pass
+
+    # 获取IP地址
+    ip_address = request.remote_addr
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # 检查是否已点赞
+    if user_id:
+        cursor.execute('''
+            SELECT * FROM likes WHERE palette_id = ? AND user_id = ?
+        ''', (palette_id, user_id))
+    else:
+        cursor.execute('''
+            SELECT * FROM likes WHERE palette_id = ? AND ip_address = ?
+        ''', (palette_id, ip_address))
+
+    liked = cursor.fetchone() is not None
+    conn.close()
+
+    return jsonify({'success': True, 'liked': liked}), 200
+
 @app.route('/api/palettes/<int:palette_id>/like', methods=['POST'])
-@jwt_required()
 def like_palette(palette_id):
     """点赞配色"""
     user_id = get_jwt_identity()
