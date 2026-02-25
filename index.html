@@ -180,7 +180,7 @@
 
         .palette-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
             gap: 25px;
         }
 
@@ -697,24 +697,278 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
             h1 {
                 font-size: 2rem;
             }
 
+            .subtitle {
+                font-size: 1rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .tabs {
+                gap: 10px;
+            }
+
+            .tab-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
             .section {
-                padding: 25px;
+                padding: 20px 15px;
+                margin-bottom: 20px;
+                border-radius: 15px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            /* 配色库 */
+            .filter-buttons {
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
             }
 
             .palette-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
 
+            .palette-card {
+                border-radius: 12px;
+            }
+
+            .color-preview {
+                height: 100px;
+            }
+
+            .palette-info {
+                padding: 15px;
+            }
+
+            .palette-name {
+                font-size: 1.1rem;
+            }
+
+            .palette-description {
+                font-size: 0.85rem;
+            }
+
+            .color-codes {
+                gap: 6px;
+            }
+
+            .color-code {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+
+            /* 颜色分析 */
             .color-analysis-layout {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .left-panel, .right-panel {
+                padding: 20px 15px;
+            }
+
+            .input-section {
+                padding: 20px 15px;
+            }
+
+            .lightness-slider-section {
+                padding: 15px;
             }
 
             .lightness-output {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+
+            .lightness-box {
+                height: 80px;
+            }
+
+            .lightness-hex {
+                font-size: 0.75rem;
+                padding: 5px 8px;
+            }
+
+            /* 工具箱 */
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .tool-card {
+                padding: 20px 15px;
+            }
+
+            .tool-title {
+                font-size: 1.2rem;
+            }
+
+            .tool-input {
+                font-size: 0.9rem;
+            }
+
+            .color-style-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            /* 模态框 */
+            .modal-content {
+                padding: 20px 15px;
+                width: 95%;
+                max-height: 85vh;
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 10px;
+                font-size: 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .chart-container {
+                padding: 15px;
+            }
+
+            .chart-title {
+                font-size: 1rem;
+            }
+
+            /* 使用说明模态框 */
+            #helpModal .modal-content {
+                padding: 20px 15px;
+            }
+
+            #helpModal h3 {
+                font-size: 1.1rem;
+            }
+
+            #helpModal ul {
+                font-size: 0.9rem;
+            }
+
+            /* 配色方案推荐 */
+            #schemeOutput > div {
+                padding: 15px !important;
+            }
+
+            #schemeOutput > div > div:first-child {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 5px;
+            }
+
+            #schemeOutput > div > div:first-child span:last-child {
+                font-size: 0.8rem;
+            }
+
+            /* 随机配色结果 */
+            #randomPaletteResult > div > div:first-child {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 10px;
+            }
+
+            #randomPaletteResult > div > div:first-child > div > div:first-child {
+                height: 60px;
+            }
+
+            #randomPaletteResult > div > div:first-child > div > div:last-child {
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
+
+            /* AI咨询 */
+            #aiResult {
+                font-size: 0.9rem;
+            }
+
+            #aiResult > div {
+                padding: 15px !important;
+            }
+
+            /* 页脚 */
+            footer {
+                margin-top: 40px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 超小屏幕（< 480px） */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .tab-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .lightness-output {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+
+            .lightness-box {
+                height: 60px;
+            }
+
+            .lightness-hex {
+                font-size: 0.7rem;
+                padding: 4px 6px;
+            }
+
+            /* 配色方案推荐的颜色块 */
+            #schemeOutput > div > div:last-child > div {
+                width: 60px !important;
+                height: 60px !important;
+                font-size: 0.7rem !important;
+            }
+
+            /* 随机配色结果 */
+            #randomPaletteResult > div > div:first-child > div > div:first-child {
+                height: 50px;
+            }
+
+            #randomPaletteResult > div > div:first-child > div > div:last-child {
+                font-size: 0.65rem;
+                padding: 2px 5px;
             }
         }
 
@@ -728,6 +982,369 @@
             color: #FFB6C1;
             text-decoration: none;
             border-bottom: 1px solid #FFB6C1;
+        }
+
+        /* 用户自定义配色 */
+        .custom-palette-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .custom-palette-section {
+            background: #FAFAFA;
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #F0F0F0;
+        }
+
+        .custom-palette-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .custom-palette-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .custom-palette-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid #F0F0F0;
+            position: relative;
+        }
+
+        .custom-palette-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.2);
+            border-color: #FFB6C1;
+        }
+
+        .custom-palette-card .color-preview {
+            height: 100px;
+            display: flex;
+        }
+
+        .custom-palette-card .color-block {
+            flex: 1;
+            cursor: pointer;
+            transition: flex 0.3s;
+            position: relative;
+        }
+
+        .custom-palette-card .color-block:hover {
+            flex: 1.3;
+        }
+
+        .custom-palette-card .palette-info {
+            padding: 20px;
+        }
+
+        .custom-palette-card .palette-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #5D5D5D;
+            margin-bottom: 8px;
+        }
+
+        .custom-palette-card .palette-description {
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .custom-palette-card .palette-type {
+            font-size: 0.8rem;
+            color: #FFB6C1;
+            background: #FFF0F5;
+            padding: 4px 12px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .custom-palette-card .color-codes {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .custom-palette-card .color-code {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            color: #666;
+            border: 2px solid #F0F0F0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .custom-palette-card .color-code:hover {
+            border-color: #FFB6C1;
+            color: #FFB6C1;
+            transform: scale(1.05);
+        }
+
+        .custom-palette-card .palette-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .custom-palette-card .action-btn {
+            flex: 1;
+            padding: 8px 15px;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .custom-palette-card .action-btn.edit {
+            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            color: white;
+        }
+
+        .custom-palette-card .action-btn.delete {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .custom-palette-card .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        /* 用户认证相关样式 */
+        #authSection {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #userPanel {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #adminPanel {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            #authSection {
+                padding: 20px 15px;
+            }
+
+            #userPanel > div:first-child {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            #uploadSection .custom-palette-form {
+                gap: 15px;
+            }
+        }
+
+        /* 每日配色 */
+        .daily-palette {
+            background: linear-gradient(135deg, #FFF0F5 0%, #E8F4F8 100%);
+            border-radius: 20px;
+            padding: 40px;
+            border: 2px solid #FFE5EC;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-palette::before {
+            content: '🎨';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 4rem;
+            opacity: 0.2;
+        }
+
+        .daily-palette-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #5D5D5D;
+            margin-bottom: 10px;
+        }
+
+        .daily-palette-date {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .daily-palette-date::before {
+            content: '📅';
+            font-size: 1.2rem;
+        }
+
+        .daily-palette-description {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .daily-palette-colors {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .daily-color-block {
+            flex: 1;
+            min-width: 120px;
+            height: 150px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .daily-color-block:hover {
+            transform: scale(1.05);
+        }
+
+        .daily-color-info {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .daily-color-hex {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .daily-color-name {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .daily-palette-usage {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px solid #F0F0F0;
+        }
+
+        .daily-usage-title {
+            font-size: 1.3rem;
+            color: #5D5D5D;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .daily-usage-title::before {
+            content: '💡';
+            font-size: 1.5rem;
+        }
+
+        .daily-usage-content {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .daily-usage-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .daily-usage-content li {
+            margin-bottom: 8px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .daily-palette {
+                padding: 25px 20px;
+            }
+
+            .daily-palette-title {
+                font-size: 1.8rem;
+            }
+
+            .daily-palette-description {
+                font-size: 1rem;
+            }
+
+            .daily-color-block {
+                min-width: 100px;
+                height: 120px;
+            }
+
+            .daily-color-hex {
+                font-size: 0.9rem;
+            }
+
+            .daily-color-name {
+                font-size: 0.8rem;
+            }
+
+            .custom-palette-section {
+                padding: 20px 15px;
+            }
+
+            .custom-palette-list {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .custom-palette-card .color-preview {
+                height: 80px;
+            }
+
+            .custom-palette-card .palette-info {
+                padding: 15px;
+            }
+
+            .custom-palette-card .palette-name {
+                font-size: 1.1rem;
+            }
+
+            .custom-palette-card .palette-description {
+                font-size: 0.85rem;
+            }
+
+            .custom-palette-card .palette-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -743,13 +1360,13 @@
 
         <!-- 标签导航 -->
         <div class="tabs">
-            <button class="tab-btn" onclick="switchTab('palette')">配色库</button>
-            <button class="tab-btn active" onclick="switchTab('lightness')">颜色分析</button>
+            <button class="tab-btn active" onclick="switchTab('palette')">配色库</button>
+            <button class="tab-btn" onclick="switchTab('lightness')">颜色分析</button>
             <button class="tab-btn" onclick="switchTab('tools')">工具箱</button>
         </div>
 
         <!-- 配色库 -->
-        <div id="palette" class="tab-content">
+        <div id="palette" class="tab-content active">
             <section class="section">
                 <h2 class="section-title">配色库</h2>
 
@@ -760,19 +1377,102 @@
                         <button class="filter-btn" onclick="filterPalettes('互补色')">互补色</button>
                         <button class="filter-btn active" onclick="filterPalettes('三角配色')">三角配色</button>
                         <button class="filter-btn" onclick="filterPalettes('四角配色')">四角配色</button>
+                        <button class="filter-btn" onclick="filterPalettes('自定义')">🌟 自定义</button>
                     </div>
+                </div>
+
+                <!-- 排序选项（仅自定义配色显示） -->
+                <div id="customSortOptions" style="display: none; margin-bottom: 20px; padding: 15px; background: #FFF0F5; border-radius: 10px;">
+                    <span style="color: #5D5D5D; font-weight: 600; margin-right: 15px;">排序方式：</span>
+                    <button class="filter-btn active" onclick="sortCustomPalettes('time')" id="sort-time">⏰ 最新发布</button>
+                    <button class="filter-btn" onclick="sortCustomPalettes('likes')" id="sort-likes">❤️ 最多喜欢</button>
                 </div>
 
                 <div class="palette-grid" id="paletteGrid">
                     <!-- 配色卡片由 JS 生成 -->
                 </div>
+
+                <!-- 用户登录/注册区域 -->
+                <div id="authSection" style="margin-top: 40px; padding: 30px; background: #FAFAFA; border-radius: 20px; border: 2px solid #F0F0F0;">
+                    <div id="loginForm">
+                        <h3 style="color: #5D5D5D; margin-bottom: 20px; font-size: 1.3rem;">🔐 用户登录 / 注册</h3>
+                        <div class="custom-palette-form">
+                            <div class="input-group">
+                                <label class="input-label">用户名</label>
+                                <input type="text" class="hex-input" id="username" placeholder="输入用户名">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">密码</label>
+                                <input type="password" class="hex-input" id="password" placeholder="输入密码">
+                            </div>
+                            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                                <button class="generate-btn" onclick="login()" style="flex: 1;">登录</button>
+                                <button class="generate-btn" onclick="register()" style="flex: 1; background: linear-gradient(135deg, #98D8C8 0%, #7A8B9A 100%);">注册</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="userPanel" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div>
+                                <span style="font-size: 1.2rem; color: #5D5D5D; font-weight: 600;">👤 欢迎，<span id="currentUser"></span></span>
+                                <span id="userRole" style="margin-left: 10px; padding: 4px 12px; background: #FFB6C1; color: white; border-radius: 15px; font-size: 0.85rem;"></span>
+                            </div>
+                            <button class="action-btn delete" onclick="logout()" style="padding: 8px 20px;">退出登录</button>
+                        </div>
+                        
+                        <!-- 上传配色表单 -->
+                        <div id="uploadSection" style="margin-top: 20px;">
+                            <h4 style="color: #5D5D5D; margin-bottom: 15px; font-size: 1.1rem;">📤 上传新配色</h4>
+                            <div class="custom-palette-form">
+                                <div class="input-group">
+                                    <label class="input-label">配色名称</label>
+                                    <input type="text" class="hex-input" id="uploadName" placeholder="例如：我的梦幻配色">
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">配色描述</label>
+                                    <textarea class="tool-input" id="uploadDescription" placeholder="描述这个配色的特点和适用场景" style="height: 80px;"></textarea>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">配色类型</label>
+                                    <select class="palette-type-select" id="uploadType">
+                                        <option value="类似色">类似色</option>
+                                        <option value="互补色">互补色</option>
+                                        <option value="三角配色">三角配色</option>
+                                        <option value="四角配色">四角配色</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">颜色列表 (HEX格式，用逗号分隔)</label>
+                                    <input type="text" class="hex-input" id="uploadColors" placeholder="#FFB6C1, #DDA0DD, #87CEEB, #98D8C8">
+                                    <div style="font-size: 0.85rem; color: #888; margin-top: 5px;">
+                                        示例格式: #FFB6C1, #DDA0DD, #87CEEB
+                                    </div>
+                                </div>
+                                <button class="generate-btn" onclick="uploadPalette()" style="width: 100%; margin-top: 20px;">📤 上传配色</button>
+                            </div>
+                        </div>
+
+                        <!-- 管理员后台 -->
+                        <div id="adminPanel" style="display: none; margin-top: 30px; padding: 20px; background: white; border-radius: 15px; border: 2px solid #FFE5EC;">
+                            <h4 style="color: #5D5D5D; margin-bottom: 15px; font-size: 1.1rem;">👑 管理员后台</h4>
+                            <div id="adminPalettesList">
+                                <!-- 管理员管理列表由 JS 生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
 
         <!-- 亮度调节器 -->
-        <div id="lightness" class="tab-content active">
+        <div id="lightness" class="tab-content">
             <section class="section">
                 <h2 class="section-title">颜色分析与配色推荐</h2>
+
+                <!-- 每日配色推荐 -->
+                <div id="dailyPaletteContainer" style="margin-bottom: 40px;">
+                    <!-- 每日配色内容由 JS 生成 -->
+                </div>
                 <div class="color-analysis-layout">
                     <!-- 左侧：颜色选择和亮度调节 -->
                     <div class="left-panel">
@@ -1955,9 +2655,14 @@
 
                 scheme.colors.forEach(color => {
                     const colorBox = document.createElement('div');
+                    // 响应式宽度：手机上使用更小的尺寸
+                    const isMobile = window.innerWidth <= 768;
+                    const boxSize = isMobile ? '60px' : '80px';
+                    const fontSize = isMobile ? '0.7rem' : '0.75rem';
+                    
                     colorBox.style.cssText = `
-                        width: 80px;
-                        height: 80px;
+                        width: ${boxSize};
+                        height: ${boxSize};
                         background: ${color};
                         border-radius: 10px;
                         cursor: pointer;
@@ -1965,7 +2670,7 @@
                         align-items: flex-end;
                         justify-content: center;
                         padding-bottom: 8px;
-                        font-size: 0.75rem;
+                        font-size: ${fontSize};
                         font-family: 'Courier New', monospace;
                         color: ${hsl.l > 50 ? '#333' : '#FFF'};
                         font-weight: 600;
@@ -2108,16 +2813,25 @@
 
             // 创建颜色网格
             const grid = document.createElement('div');
-            grid.style.cssText = 'display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;';
+            // 响应式网格：手机上使用更少的列数
+            const isMobile = window.innerWidth <= 768;
+            const columns = isMobile ? 'repeat(auto-fill, minmax(60px, 1fr))' : 'repeat(5, 1fr)';
+            const gap = isMobile ? '10px' : '15px';
+            grid.style.cssText = `display: grid; grid-template-columns: ${columns}; gap: ${gap};`;
 
             colors.forEach(color => {
                 const colorDiv = document.createElement('div');
                 colorDiv.style.textAlign = 'center';
 
+                // 响应式高度：手机上使用更小的尺寸
+                const isMobile = window.innerWidth <= 768;
+                const boxHeight = isMobile ? '50px' : '80px';
+                const fontSize = isMobile ? '0.7rem' : '0.85rem';
+
                 const colorBox = document.createElement('div');
                 colorBox.style.cssText = `
                     width: 100%;
-                    height: 80px;
+                    height: ${boxHeight};
                     background: ${color};
                     border-radius: 10px;
                     margin-bottom: 8px;
@@ -2135,10 +2849,10 @@
                 const hexLabel = document.createElement('div');
                 hexLabel.style.cssText = `
                     font-family: 'Courier New', monospace;
-                    font-size: 0.85rem;
+                    font-size: ${fontSize};
                     color: #5D5D5D;
                     background: white;
-                    padding: 5px 10px;
+                    padding: ${isMobile ? '3px 6px' : '5px 10px'};
                     border-radius: 15px;
                     cursor: pointer;
                     border: 2px solid #F0F0F0;
@@ -2477,6 +3191,719 @@
         function copySliderColor() {
             const hex = document.getElementById('sliderHex').textContent;
             copyToClipboard(hex);
+        }
+
+        // 每日配色数据
+        const dailyPalettes = [
+            {
+                name: "春日花园",
+                date: "2026-02-25",
+                description: "春天气息的柔和配色，适合春季主题设计、花卉包装、婚礼装饰",
+                colors: [
+                    {hex: "#FFB7C5", name: "樱花粉"},
+                    {hex: "#8FB07A", name: "新叶绿"},
+                    {hex: "#7A8B9A", name: "晨雾蓝"},
+                    {hex: "#E8C4C4", name: "杏仁白"},
+                    {hex: "#98D8C8", name: "薄荷绿"}
+                ],
+                usage: [
+                    "🌺 春季品牌设计 - 适合花卉、婚礼、化妆品品牌",
+                    "📚 教育材料 - 柔和色彩减少视觉疲劳",
+                    "🎨 插画艺术 - 自然色调适合手绘风格",
+                    "📱 移动应用 - 清新界面提升用户体验"
+                ]
+            },
+            {
+                name: "夏日海滩",
+                date: "2026-02-26",
+                description: "清爽活力的夏季配色，适合旅游、运动、夏季促销设计",
+                colors: [
+                    {hex: "#87CEEB", name: "天空蓝"},
+                    {hex: "#FFB347", name: "阳光橙"},
+                    {hex: "#98FB98", name: "海水绿"},
+                    {hex: "#DDA0DD", name: "珊瑚紫"},
+                    {hex: "#F7DC6F", name: "沙滩黄"}
+                ],
+                usage: [
+                    "🏖️ 旅游宣传 - 适合海滩度假、水上活动",
+                    "🏃 运动品牌 - 活力色彩激发运动热情",
+                    "🍹 夏季促销 - 清凉色调适合饮料、冰品",
+                    "📱 社交媒体 - 明亮色彩吸引眼球"
+                ]
+            },
+            {
+                name: "秋日暖阳",
+                date: "2026-02-27",
+                description: "温暖舒适的秋季配色，适合咖啡店、书店、家居设计",
+                colors: [
+                    {hex: "#C19A6B", name: "拿铁棕"},
+                    {hex: "#8B4557", name: "枫叶红"},
+                    {hex: "#5D7A5D", name: "橄榄绿"},
+                    {hex: "#4A5568", name: "石墨灰"},
+                    {hex: "#D4A574", name: "杏仁黄"}
+                ],
+                usage: [
+                    "☕ 咖啡品牌 - 温暖色调适合咖啡、烘焙",
+                    "📖 书店设计 - 文艺气息浓厚",
+                    "🏠 家居装饰 - 温馨舒适的家居氛围",
+                    "🎁 秋季包装 - 适合食品、礼品包装"
+                ]
+            },
+            {
+                name: "冬日雪景",
+                date: "2026-02-28",
+                description: "清冷优雅的冬季配色，适合冬季主题、节日装饰、高端品牌",
+                colors: [
+                    {hex: "#A8A8A8", name: "雪白"},
+                    {hex: "#8B9A8B", name: "松针绿"},
+                    {hex: "#9A8B9A", name: "梅子紫"},
+                    {hex: "#8B8B9A", name: "冰蓝"},
+                    {hex: "#C8C8C8", name: "银灰"}
+                ],
+                usage: [
+                    "❄️ 冬季主题 - 适合圣诞节、新年设计",
+                    "🎄 节日装饰 - 清冷色调营造节日氛围",
+                    "👔 高端品牌 - 优雅色调适合奢侈品",
+                    "📊 数据可视化 - 冷静色调适合报告、图表"
+                ]
+            },
+            {
+                name: "科技未来",
+                date: "2026-02-29",
+                description: "科技感十足的配色，适合科技产品、创新设计、数字艺术",
+                colors: [
+                    {hex: "#2C3E50", name: "深空蓝"},
+                    {hex: "#3498DB", name: "科技蓝"},
+                    {hex: "#1ABC9C", name: "数据绿"},
+                    {hex: "#9B59B6", name: "量子紫"},
+                    {hex: "#E74C3C", name: "能量红"}
+                ],
+                usage: [
+                    "💻 科技产品 - 适合APP、网站、软件界面",
+                    "🚀 创新设计 - 未来感十足",
+                    "🎮 游戏设计 - 适合科幻、未来题材",
+                    "📈 数据展示 - 专业色调适合科技报告"
+                ]
+            }
+        ];
+
+        // 获取当前日期对应的每日配色
+        function getDailyPalette() {
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            
+            // 查找对应日期的配色
+            const palette = dailyPalettes.find(p => p.date === dateStr);
+            
+            // 如果没有找到，使用今天的日期计算索引
+            if (!palette) {
+                const index = Math.floor(Math.random() * dailyPalettes.length);
+                return dailyPalettes[index];
+            }
+            
+            return palette;
+        }
+
+        // 渲染每日配色
+        function renderDailyPalette() {
+            const container = document.getElementById('dailyPaletteContainer');
+            const palette = getDailyPalette();
+            
+            // 格式化日期
+            const date = new Date(palette.date);
+            const dateStr = date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+
+            // 创建每日配色内容
+            const dailyHTML = `
+                <div class="daily-palette">
+                    <div class="daily-palette-title">${palette.name}</div>
+                    <div class="daily-palette-date">${dateStr}</div>
+                    <div class="daily-palette-description">${palette.description}</div>
+                    
+                    <div class="daily-palette-colors">
+                        ${palette.colors.map(color => `
+                            <div class="daily-color-block" style="background: ${color.hex};" onclick="copyToClipboard('${color.hex}')">
+                                <div class="daily-color-info">
+                                    <div class="daily-color-hex">${color.hex}</div>
+                                    <div class="daily-color-name">${color.name}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="daily-palette-usage">
+                        <div class="daily-usage-title">应用场景</div>
+                        <div class="daily-usage-content">
+                            <ul>
+                                ${palette.usage.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = dailyHTML;
+        }
+
+        // 用户自定义配色存储
+        function getCustomPalettes() {
+            const palettes = localStorage.getItem('customPalettes');
+            return palettes ? JSON.parse(palettes) : [];
+        }
+
+        function saveCustomPalettes(palettes) {
+            localStorage.setItem('customPalettes', JSON.stringify(palettes));
+        }
+
+        // 保存用户自定义配色
+        function saveCustomPalette() {
+            const name = document.getElementById('customName').value.trim();
+            const description = document.getElementById('customDescription').value.trim();
+            const type = document.getElementById('customType').value;
+            const colorsInput = document.getElementById('customColors').value.trim();
+            
+            // 验证输入
+            if (!name) {
+                showToast('请输入配色名称');
+                return;
+            }
+            
+            if (!colorsInput) {
+                showToast('请输入颜色列表');
+                return;
+            }
+            
+            // 解析颜色列表
+            const colors = colorsInput.split(',')
+                .map(color => color.trim())
+                .filter(color => /^#[0-9A-Fa-f]{6}$/.test(color));
+            
+            if (colors.length === 0) {
+                showToast('请输入有效的HEX颜色码（例如：#FFB6C1）');
+                return;
+            }
+            
+            // 创建配色对象
+            const palette = {
+                id: Date.now(),
+                name: name,
+                description: description,
+                type: type,
+                colors: colors,
+                createdAt: new Date().toISOString()
+            };
+            
+            // 保存到本地存储
+            const palettes = getCustomPalettes();
+            palettes.push(palette);
+            saveCustomPalettes(palettes);
+            
+            // 清空表单
+            document.getElementById('customName').value = '';
+            document.getElementById('customDescription').value = '';
+            document.getElementById('customColors').value = '';
+            
+            // 更新列表
+            renderCustomPalettes();
+            
+            showToast(`已保存配色: ${name}`);
+        }
+
+        // 渲染用户自定义配色
+        function renderCustomPalettes() {
+            const container = document.getElementById('customPalettesList');
+            const palettes = getCustomPalettes();
+            
+            if (palettes.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #888;">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
+                        <div style="font-size: 1.2rem; margin-bottom: 10px;">还没有自定义配色</div>
+                        <div style="font-size: 0.9rem;">创建一个新的配色方案吧！</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const palettesHTML = `
+                <div class="custom-palette-list">
+                    ${palettes.map(palette => `
+                        <div class="custom-palette-card">
+                            <div class="color-preview">
+                                ${palette.colors.map(color => `
+                                    <div class="color-block" style="background: ${color};" onclick="copyToClipboard('${color}')"></div>
+                                `).join('')}
+                            </div>
+                            <div class="palette-info">
+                                <div class="palette-name">${palette.name}</div>
+                                <div class="palette-type">${palette.type}</div>
+                                <div class="palette-description">${palette.description}</div>
+                                <div class="color-codes">
+                                    ${palette.colors.map(color => `
+                                        <span class="color-code" onclick="copyToClipboard('${color}')">${color}</span>
+                                    `).join('')}
+                                </div>
+                                <div class="palette-actions">
+                                    <button class="action-btn edit" onclick="previewCustomPalette('${palette.id}')">预览</button>
+                                    <button class="action-btn delete" onclick="deleteCustomPalette('${palette.id}')">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            container.innerHTML = palettesHTML;
+        }
+
+        // 预览自定义配色
+        function previewCustomPalette(id) {
+            const palettes = getCustomPalettes();
+            const palette = palettes.find(p => p.id.toString() === id);
+            
+            if (palette) {
+                openChartModal(palette);
+            }
+        }
+
+        // 删除自定义配色
+        function deleteCustomPalette(id) {
+            if (!confirm('确定要删除这个配色方案吗？')) {
+                return;
+            }
+            
+            const palettes = getCustomPalettes();
+            const index = palettes.findIndex(p => p.id.toString() === id);
+            
+            if (index !== -1) {
+                const deletedName = palettes[index].name;
+                palettes.splice(index, 1);
+                saveCustomPalettes(palettes);
+                renderCustomPalettes();
+                showToast(`已删除配色: ${deletedName}`);
+            }
+        }
+
+        // 初始化
+        renderPalettes('三角配色'); // 默认显示三角配色
+        updateLightness();
+        renderDailyPalette(); // 渲染每日配色
+        checkAuthStatus(); // 检查登录状态
+
+        // 用户认证系统
+        let currentUser = null;
+
+        // 检查登录状态
+        function checkAuthStatus() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showUserPanel();
+            }
+        }
+
+        // 用户注册
+        async function register() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                showToast('请输入用户名和密码');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('注册成功！请登录');
+                } else {
+                    showToast(data.message || '注册失败');
+                }
+            } catch (error) {
+                // 离线模式：使用本地存储
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.find(u => u.username === username)) {
+                    showToast('用户名已存在');
+                    return;
+                }
+
+                const newUser = {
+                    id: Date.now(),
+                    username: username,
+                    password: password,
+                    role: username === 'admin' ? 'admin' : 'user',
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                showToast('注册成功！请登录');
+            }
+        }
+
+        // 用户登录
+        async function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                showToast('请输入用户名和密码');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentUser = data.user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showUserPanel();
+                    showToast(`欢迎回来，${username}！`);
+                } else {
+                    showToast(data.message || '登录失败');
+                }
+            } catch (error) {
+                // 离线模式：使用本地存储
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showUserPanel();
+                    showToast(`欢迎回来，${username}！`);
+                } else {
+                    showToast('用户名或密码错误');
+                }
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('userPanel').style.display = 'none';
+            showToast('已退出登录');
+        }
+
+        // 显示用户面板
+        function showUserPanel() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('userPanel').style.display = 'block';
+            document.getElementById('currentUser').textContent = currentUser.username;
+            document.getElementById('userRole').textContent = currentUser.role === 'admin' ? '管理员' : '普通用户';
+
+            // 如果是管理员，显示管理面板
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminPanel').style.display = 'block';
+                renderAdminPanel();
+            }
+        }
+
+        // 上传配色
+        async function uploadPalette() {
+            if (!currentUser) {
+                showToast('请先登录');
+                return;
+            }
+
+            const name = document.getElementById('uploadName').value.trim();
+            const description = document.getElementById('uploadDescription').value.trim();
+            const type = document.getElementById('uploadType').value;
+            const colorsInput = document.getElementById('uploadColors').value.trim();
+
+            if (!name || !colorsInput) {
+                showToast('请填写配色名称和颜色列表');
+                return;
+            }
+
+            const colors = colorsInput.split(',')
+                .map(color => color.trim())
+                .filter(color => /^#[0-9A-Fa-f]{6}$/.test(color));
+
+            if (colors.length === 0) {
+                showToast('请输入有效的HEX颜色码');
+                return;
+            }
+
+            const palette = {
+                id: Date.now(),
+                name: name,
+                description: description,
+                type: type,
+                colors: colors,
+                userId: currentUser.id,
+                username: currentUser.username,
+                likes: 0,
+                likedBy: [],
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch('/api/palettes/upload', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(palette)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('上传成功！');
+                    // 清空表单
+                    document.getElementById('uploadName').value = '';
+                    document.getElementById('uploadDescription').value = '';
+                    document.getElementById('uploadColors').value = '';
+                    // 刷新配色库
+                    filterPalettes('自定义');
+                } else {
+                    showToast(data.message || '上传失败');
+                }
+            } catch (error) {
+                // 离线模式：使用本地存储
+                const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
+                customPalettes.push(palette);
+                localStorage.setItem('customPalettes', JSON.stringify(customPalettes));
+
+                showToast('上传成功！');
+                // 清空表单
+                document.getElementById('uploadName').value = '';
+                document.getElementById('uploadDescription').value = '';
+                document.getElementById('uploadColors').value = '';
+                // 刷新配色库
+                filterPalettes('自定义');
+            }
+        }
+
+        // 喜欢配色
+        function likePalette(paletteId) {
+            const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
+            const palette = customPalettes.find(p => p.id === paletteId);
+
+            if (!palette) return;
+
+            // 检查是否已经喜欢过
+            const userId = currentUser ? currentUser.id : 'guest_' + Date.now();
+            if (palette.likedBy.includes(userId)) {
+                showToast('你已经喜欢过了');
+                return;
+            }
+
+            palette.likes++;
+            palette.likedBy.push(userId);
+            localStorage.setItem('customPalettes', JSON.stringify(customPalettes));
+
+            // 刷新显示
+            filterPalettes('自定义');
+            showToast('已喜欢 ❤️');
+        }
+
+        // 排序自定义配色
+        let currentSort = 'time';
+
+        function sortCustomPalettes(sortType) {
+            currentSort = sortType;
+
+            // 更新按钮状态
+            document.getElementById('sort-time').classList.toggle('active', sortType === 'time');
+            document.getElementById('sort-likes').classList.toggle('active', sortType === 'likes');
+
+            // 重新渲染
+            filterPalettes('自定义');
+        }
+
+        // 渲染管理员面板
+        function renderAdminPanel() {
+            const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
+
+            const html = `
+                <div style="margin-bottom: 15px; color: #888;">
+                    共 ${customPalettes.length} 个自定义配色
+                </div>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${customPalettes.map(palette => `
+                        <div style="background: #FAFAFA; padding: 15px; margin-bottom: 10px; border-radius: 10px; border: 2px solid #F0F0F0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-weight: 600; color: #5D5D5D;">${palette.name}</div>
+                                    <div style="font-size: 0.85rem; color: #888;">作者: ${palette.username} | ❤️ ${palette.likes}</div>
+                                </div>
+                                <button class="action-btn delete" onclick="adminDeletePalette(${palette.id})" style="padding: 5px 15px;">删除</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('adminPalettesList').innerHTML = html;
+        }
+
+        // 管理员删除配色
+        function adminDeletePalette(paletteId) {
+            if (!confirm('确定要删除这个配色吗？')) return;
+
+            const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
+            const index = customPalettes.findIndex(p => p.id === paletteId);
+
+            if (index !== -1) {
+                customPalettes.splice(index, 1);
+                localStorage.setItem('customPalettes', JSON.stringify(customPalettes));
+                renderAdminPanel();
+                filterPalettes('自定义');
+                showToast('已删除');
+            }
+        }
+
+        // 修改筛选配色函数，支持自定义配色
+        function filterPalettes(type) {
+            // 更新按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes(type) || btn.textContent === type) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // 显示/隐藏排序选项
+            document.getElementById('customSortOptions').style.display = type === '自定义' ? 'block' : 'none';
+
+            // 重新渲染配色方案
+            renderPalettes(type);
+        }
+
+        // 修改渲染配色库函数，支持自定义配色
+        function renderPalettes(filterType = '三角配色') {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+
+            let filteredPalettes = [];
+
+            if (filterType === '自定义') {
+                // 渲染自定义配色
+                const customPalettes = JSON.parse(localStorage.getItem('customPalettes') || '[]');
+
+                // 排序
+                if (currentSort === 'time') {
+                    customPalettes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                } else if (currentSort === 'likes') {
+                    customPalettes.sort((a, b) => b.likes - a.likes);
+                }
+
+                filteredPalettes = customPalettes;
+
+                if (filteredPalettes.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #888;">
+                            <div style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
+                            <div style="font-size: 1.2rem; margin-bottom: 10px;">还没有自定义配色</div>
+                            <div style="font-size: 0.9rem;">登录后上传你的第一个配色吧！</div>
+                        </div>
+                    `;
+                    return;
+                }
+            } else {
+                // 渲染系统配色
+                filteredPalettes = macaronPalettes.filter(palette => palette.type === filterType);
+            }
+
+            filteredPalettes.forEach((palette, index) => {
+                const card = document.createElement('div');
+                card.className = 'palette-card';
+                card.style.cursor = 'pointer';
+
+                const preview = document.createElement('div');
+                preview.className = 'color-preview';
+
+                palette.colors.forEach(color => {
+                    const block = document.createElement('div');
+                    block.className = 'color-block';
+                    block.style.backgroundColor = color;
+                    block.onclick = (e) => {
+                        e.stopPropagation();
+                        copyToClipboard(color);
+                    };
+                    preview.appendChild(block);
+                });
+
+                const info = document.createElement('div');
+                info.className = 'palette-info';
+
+                const name = document.createElement('div');
+                name.className = 'palette-name';
+                name.textContent = palette.name;
+
+                const desc = document.createElement('div');
+                desc.className = 'palette-description';
+                desc.textContent = `${palette.description} (${palette.type})`;
+
+                const codes = document.createElement('div');
+                codes.className = 'color-codes';
+
+                palette.colors.forEach(color => {
+                    const code = document.createElement('span');
+                    code.className = 'color-code';
+                    code.textContent = color;
+                    code.onclick = (e) => {
+                        e.stopPropagation();
+                        copyToClipboard(color);
+                    };
+                    codes.appendChild(code);
+                });
+
+                info.appendChild(name);
+                info.appendChild(desc);
+                info.appendChild(codes);
+
+                // 如果是自定义配色，添加作者信息和喜欢按钮
+                if (filterType === '自定义') {
+                    const metaInfo = document.createElement('div');
+                    metaInfo.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 2px solid #F0F0F0;';
+
+                    const authorInfo = document.createElement('div');
+                    authorInfo.style.cssText = 'font-size: 0.85rem; color: #888;';
+                    authorInfo.innerHTML = `👤 ${palette.username} | ${new Date(palette.createdAt).toLocaleDateString('zh-CN')}`;
+
+                    const likeBtn = document.createElement('button');
+                    likeBtn.className = 'action-btn edit';
+                    likeBtn.style.cssText = 'padding: 5px 15px; font-size: 0.85rem;';
+                    likeBtn.innerHTML = `❤️ ${palette.likes}`;
+                    likeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        likePalette(palette.id);
+                    };
+
+                    metaInfo.appendChild(authorInfo);
+                    metaInfo.appendChild(likeBtn);
+                    info.appendChild(metaInfo);
+                }
+
+                card.appendChild(preview);
+                card.appendChild(info);
+
+                // 点击卡片打开图表预览
+                card.onclick = () => openChartModal(palette);
+
+                grid.appendChild(card);
+            });
         }
     </script>
 </body>

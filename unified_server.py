@@ -145,4 +145,5 @@ def run_server(port=8888):
         sys.exit(0)
 
 if __name__ == '__main__':
-    run_server()
+    port = int(os.getenv('PORT', 8888))
+    run_server(port)
