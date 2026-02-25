@@ -1,0 +1,484 @@
+#!/usr/bin/env python3
+"""
+Academic Color Palette - Backend API Server
+完整的用户认证和配色管理系统
+"""
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+import sqlite3
+import os
+from datetime import datetime, timedelta
+import uuid
+
+app = Flask(__name__)
+CORS(app)
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+
+# 配置
+app.config['JWT_SECRET_KEY'] = 'your-secret-key-change-in-production'  # 生产环境需要修改
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
+
+# 数据库路径
+DB_PATH = '/var/www/palette/database.db'
+
+# 初始化数据库
+def init_db():
+    """初始化数据库表"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    # 用户表
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE,
+            password_hash TEXT NOT NULL,
+            role TEXT DEFAULT 'user',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    
+    # 配色表
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS palettes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT,
+            type TEXT NOT NULL,
+            colors TEXT NOT NULL,
+            user_id INTEGER NOT NULL,
+            username TEXT NOT NULL,
+            likes INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    ''')
+    
+    # 点赞记录表
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS likes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            palette_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            ip_address TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (palette_id) REFERENCES palettes (id),
+            FOREIGN KEY (user_id) REFERENCES users (id),
+            UNIQUE(palette_id, user_id)
+        )
+    ''')
+    
+    # 创建默认管理员账号
+    cursor.execute('SELECT * FROM users WHERE username = ?', ('admin',))
+    if not cursor.fetchone():
+        password_hash = bcrypt.generate_password_hash('admin123').decode('utf-8')
+        cursor.execute(
+            'INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)',
+            ('admin', password_hash, 'admin')
+        )
+        print("✅ 创建默认管理员账号: admin / admin123")
+    
+    conn.commit()
+    conn.close()
+
+# 获取数据库连接
+def get_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# ==================== 用户认证 API ====================
+
+@app.route('/api/auth/register', methods=['POST'])
+def register():
+    """用户注册"""
+    data = request.get_json()
+    username = data.get('username', '').strip()
+    email = data.get('email', '').strip()
+    password = data.get('password', '').strip()
+    
+    if not username or not email or not password:
+        return jsonify({'success': False, 'message': '用户名、邮箱和密码不能为空'}), 400
+    
+    if len(username) < 3:
+        return jsonify({'success': False, 'message': '用户名至少3个字符'}), 400
+    
+    if len(password) < 6:
+        return jsonify({'success': False, 'message': '密码至少6个字符'}), 400
+    
+    # 验证邮箱格式
+    import re
+    if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+        return jsonify({'success': False, 'message': '邮箱格式不正确'}), 400
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 检查用户名是否已存在
+    cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+    if cursor.fetchone():
+        conn.close()
+        return jsonify({'success': False, 'message': '用户名已存在'}), 400
+    
+    # 检查邮箱是否已存在
+    cursor.execute('SELECT * FROM users WHERE email = ?', (email,))
+    if cursor.fetchone():
+        conn.close()
+        return jsonify({'success': False, 'message': '邮箱已被注册'}), 400
+    
+    # 创建新用户
+    password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    cursor.execute(
+        'INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)',
+        (username, email, password_hash, 'user')
+    )
+    conn.commit()
+    
+    # 获取新用户信息
+    user_id = cursor.lastrowid
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    
+    # 生成JWT token
+    access_token = create_access_token(identity=str(user_id))
+    
+    return jsonify({
+        'success': True,
+        'message': '注册成功',
+        'user': {
+            'id': user['id'],
+            'username': user['username'],
+            'email': user['email'],
+            'role': user['role']
+        },
+        'access_token': access_token
+    }), 201
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    """用户登录（支持用户名或邮箱登录）"""
+    data = request.get_json()
+    login_input = data.get('username', '').strip()  # 可以是用户名或邮箱
+    password = data.get('password', '').strip()
+    
+    if not login_input or not password:
+        return jsonify({'success': False, 'message': '用户名/邮箱和密码不能为空'}), 400
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 判断是邮箱还是用户名
+    if '@' in login_input:
+        # 邮箱登录
+        cursor.execute('SELECT * FROM users WHERE email = ?', (login_input,))
+    else:
+        # 用户名登录
+        cursor.execute('SELECT * FROM users WHERE username = ?', (login_input,))
+    
+    user = cursor.fetchone()
+    conn.close()
+    
+    if not user or not bcrypt.check_password_hash(user['password_hash'], password):
+        return jsonify({'success': False, 'message': '用户名/邮箱或密码错误'}), 401
+    
+    # 生成JWT token
+    access_token = create_access_token(identity=str(user['id']))
+    
+    return jsonify({
+        'success': True,
+        'message': '登录成功',
+        'user': {
+            'id': user['id'],
+            'username': user['username'],
+            'email': user['email'] if user['email'] else '',
+            'role': user['role']
+        },
+        'access_token': access_token
+    }), 200
+
+@app.route('/api/auth/me', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    """获取当前登录用户信息"""
+    user_id = get_jwt_identity()
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    
+    if not user:
+        return jsonify({'success': False, 'message': '用户不存在'}), 404
+    
+    return jsonify({
+        'success': True,
+        'user': {
+            'id': user['id'],
+            'username': user['username'],
+            'email': user['email'] if user['email'] else '',
+            'role': user['role']
+        }
+    }), 200
+
+# ==================== 配色管理 API ====================
+
+@app.route('/api/palettes/upload', methods=['POST'])
+@jwt_required()
+def upload_palette():
+    """上传配色"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    
+    name = data.get('name', '').strip()
+    description = data.get('description', '').strip()
+    palette_type = data.get('type', '').strip()
+    colors = data.get('colors', [])
+    
+    if not name or not colors:
+        return jsonify({'success': False, 'message': '配色名称和颜色列表不能为空'}), 400
+    
+    if not isinstance(colors, list) or len(colors) == 0:
+        return jsonify({'success': False, 'message': '颜色列表格式错误'}), 400
+    
+    # 验证颜色格式
+    import re
+    for color in colors:
+        if not re.match(r'^#[0-9A-Fa-f]{6}$', color):
+            return jsonify({'success': False, 'message': f'颜色格式错误: {color}'}), 400
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 获取用户信息
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    
+    if not user:
+        conn.close()
+        return jsonify({'success': False, 'message': '用户不存在'}), 404
+    
+    # 保存配色
+    colors_str = ','.join(colors)
+    cursor.execute(
+        'INSERT INTO palettes (name, description, type, colors, user_id, username) VALUES (?, ?, ?, ?, ?, ?)',
+        (name, description, palette_type, colors_str, user_id, user['username'])
+    )
+    conn.commit()
+    
+    palette_id = cursor.lastrowid
+    conn.close()
+    
+    return jsonify({
+        'success': True,
+        'message': '上传成功',
+        'palette_id': palette_id
+    }), 201
+
+@app.route('/api/palettes', methods=['GET'])
+def get_palettes():
+    """获取配色列表"""
+    sort_by = request.args.get('sort', 'time')  # time 或 likes
+    palette_type = request.args.get('type', None)  # 筛选类型
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 构建查询
+    query = 'SELECT * FROM palettes'
+    params = []
+    
+    if palette_type and palette_type != '自定义':
+        query += ' WHERE type = ?'
+        params.append(palette_type)
+    
+    # 排序
+    if sort_by == 'likes':
+        query += ' ORDER BY likes DESC, created_at DESC'
+    else:
+        query += ' ORDER BY created_at DESC'
+    
+    cursor.execute(query, params)
+    palettes = cursor.fetchall()
+    conn.close()
+    
+    # 格式化返回数据
+    result = []
+    for p in palettes:
+        result.append({
+            'id': p['id'],
+            'name': p['name'],
+            'description': p['description'],
+            'type': p['type'],
+            'colors': p['colors'].split(','),
+            'userId': p['user_id'],
+            'username': p['username'],
+            'likes': p['likes'],
+            'createdAt': p['created_at']
+        })
+    
+    return jsonify({
+        'success': True,
+        'palettes': result
+    }), 200
+
+@app.route('/api/palettes/<int:palette_id>/like', methods=['POST'])
+@jwt_required()
+def like_palette(palette_id):
+    """点赞配色"""
+    user_id = get_jwt_identity()
+    ip_address = request.remote_addr
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 检查是否已点赞
+    cursor.execute(
+        'SELECT * FROM likes WHERE palette_id = ? AND user_id = ?',
+        (palette_id, user_id)
+    )
+    if cursor.fetchone():
+        conn.close()
+        return jsonify({'success': False, 'message': '你已经点赞过了'}), 400
+    
+    # 添加点赞记录
+    cursor.execute(
+        'INSERT INTO likes (palette_id, user_id, ip_address) VALUES (?, ?, ?)',
+        (palette_id, user_id, ip_address)
+    )
+    
+    # 更新点赞数
+    cursor.execute(
+        'UPDATE palettes SET likes = likes + 1 WHERE id = ?',
+        (palette_id,)
+    )
+    
+    # 获取新的点赞数
+    cursor.execute('SELECT likes FROM palettes WHERE id = ?', (palette_id,))
+    palette = cursor.fetchone()
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({
+        'success': True,
+        'message': '点赞成功',
+        'likes': palette['likes']
+    }), 200
+
+@app.route('/api/palettes/<int:palette_id>', methods=['DELETE'])
+@jwt_required()
+def delete_palette(palette_id):
+    """删除配色（仅管理员或作者）"""
+    user_id = get_jwt_identity()
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 获取用户信息
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    
+    # 获取配色信息
+    cursor.execute('SELECT * FROM palettes WHERE id = ?', (palette_id,))
+    palette = cursor.fetchone()
+    
+    if not palette:
+        conn.close()
+        return jsonify({'success': False, 'message': '配色不存在'}), 404
+    
+    # 检查权限（管理员或作者）
+    if user['role'] != 'admin' and palette['user_id'] != user_id:
+        conn.close()
+        return jsonify({'success': False, 'message': '没有权限删除'}), 403
+    
+    # 删除点赞记录
+    cursor.execute('DELETE FROM likes WHERE palette_id = ?', (palette_id,))
+    
+    # 删除配色
+    cursor.execute('DELETE FROM palettes WHERE id = ?', (palette_id,))
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({
+        'success': True,
+        'message': '删除成功'
+    }), 200
+
+@app.route('/api/admin/palettes', methods=['GET'])
+@jwt_required()
+def admin_get_palettes():
+    """管理员获取所有配色"""
+    user_id = get_jwt_identity()
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 检查权限
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    
+    if user['role'] != 'admin':
+        conn.close()
+        return jsonify({'success': False, 'message': '没有权限'}), 403
+    
+    # 获取所有配色
+    cursor.execute('SELECT * FROM palettes ORDER BY created_at DESC')
+    palettes = cursor.fetchall()
+    conn.close()
+    
+    # 格式化返回数据
+    result = []
+    for p in palettes:
+        result.append({
+            'id': p['id'],
+            'name': p['name'],
+            'description': p['description'],
+            'type': p['type'],
+            'colors': p['colors'].split(','),
+            'userId': p['user_id'],
+            'username': p['username'],
+            'likes': p['likes'],
+            'createdAt': p['created_at']
+        })
+    
+    return jsonify({
+        'success': True,
+        'palettes': result
+    }), 200
+
+# ==================== 健康检查 ====================
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """健康检查"""
+    return jsonify({
+        'success': True,
+        'message': 'API服务正常运行',
+        'timestamp': datetime.now().isoformat()
+    }), 200
+
+if __name__ == '__main__':
+    # 确保数据库目录存在
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    
+    # 初始化数据库
+    init_db()
+    
+    print("=" * 60)
+    print("🎨 Academic Color Palette - Backend API Server")
+    print("=" * 60)
+    print(f"📡 API地址: http://localhost:8890")
+    print(f"💾 数据库: {DB_PATH}")
+    print(f"👤 管理员账号: admin / admin123")
+    print("=" * 60)
+    
+    # 启动服务器
+    app.run(host='0.0.0.0', port=8890, debug=True)
