@@ -2861,6 +2861,24 @@
                 desc.className = 'palette-description';
                 desc.textContent = `${palette.description} (${palette.type})`;
 
+                // 显示上传者和点赞数（仅自定义配色）
+                if (filterType === '自定义' && palette.username) {
+                    const meta = document.createElement('div');
+                    meta.className = 'palette-meta';
+                    meta.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.85rem; color: #888;';
+
+                    const uploader = document.createElement('span');
+                    uploader.textContent = `上传者: ${palette.username}`;
+
+                    const likesInfo = document.createElement('span');
+                    likesInfo.style.cssText = 'display: flex; align-items: center; gap: 4px;';
+                    likesInfo.innerHTML = `<span style="color: #ff6b6b;">❤️</span> ${palette.likes || 0}`;
+
+                    meta.appendChild(uploader);
+                    meta.appendChild(likesInfo);
+                    desc.appendChild(meta);
+                }
+
                 const codes = document.createElement('div');
                 codes.className = 'color-codes';
 
