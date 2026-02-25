@@ -2834,6 +2834,20 @@
                 return;
             }
 
+            // 清空内容重新渲染
+            grid.innerHTML = '';
+
+            // 如果没有配色方案
+            if (filteredPalettes.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #888;">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
+                        <div>暂无${filterType}配色方案</div>
+                    </div>
+                `;
+                return;
+            }
+
             filteredPalettes.forEach((palette, index) => {
                 const card = document.createElement('div');
                 card.className = 'palette-card';
