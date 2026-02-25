@@ -282,15 +282,24 @@ def register():
     conn = get_db()
     cursor = conn.cursor()
 
+    # 查询未使用的验证码
     cursor.execute('''
         SELECT * FROM email_verifications
-        WHERE email = ? AND code = ? AND used = 1 AND expires_at > ?
+        WHERE email = ? AND code = ? AND used = 0 AND expires_at > ?
         ORDER BY created_at DESC LIMIT 1
     ''', (email, verification_code, datetime.now()))
 
-    if not cursor.fetchone():
+    verification = cursor.fetchone()
+    if not verification:
         conn.close()
-        return jsonify({'success': False, 'message': '验证码错误或未验证'}), 400
+        return jsonify({'success': False, 'message': '验证码错误或已过期'}), 400
+
+    # 标记验证码为已使用
+    cursor.execute('''
+        UPDATE email_verifications
+        SET used = 1
+        WHERE id = ?
+    ''', (verification[0],))
 
     # 检查用户名是否已存在
     cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
