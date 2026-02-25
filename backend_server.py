@@ -12,6 +12,11 @@ import sqlite3
 import os
 from datetime import datetime, timedelta
 import uuid
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import random
+import string
 
 app = Flask(__name__)
 CORS(app)
@@ -21,6 +26,12 @@ jwt = JWTManager(app)
 # 配置
 app.config['JWT_SECRET_KEY'] = 'your-secret-key-change-in-production'  # 生产环境需要修改
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
+
+# 邮箱配置（需要配置SMTP服务器）
+SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.qq.com')
+SMTP_PORT = int(os.environ.get('SMTP_PORT', 465))
+SMTP_USERNAME = os.environ.get('SMTP_USERNAME', '')  # 发件邮箱
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')  # 邮箱授权码
 
 # 数据库路径
 DB_PATH = '/var/www/palette/database.db'
@@ -72,6 +83,18 @@ def init_db():
             UNIQUE(palette_id, user_id)
         )
     ''')
+
+    # 邮箱验证码表
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS email_verifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL,
+            code TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            expires_at TIMESTAMP NOT NULL,
+            used INTEGER DEFAULT 0
+        )
+    ''')
     
     # 创建默认管理员账号
     cursor.execute('SELECT * FROM users WHERE username = ?', ('admin',))
@@ -92,45 +115,184 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-# ==================== 用户认证 API ====================
+# ==================== 邮箱验证 API ====================
 
-@app.route('/api/auth/register', methods=['POST'])
-def register():
-    """用户注册"""
+def send_email(to_email, subject, body):
+    """发送邮件"""
+    if not SMTP_USERNAME or not SMTP_PASSWORD:
+        print(f"⚠️ SMTP未配置，验证码将打印到控制台: {body}")
+        return True
+
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = SMTP_USERNAME
+        msg['To'] = to_email
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(body, 'html', 'utf-8'))
+
+        server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
+        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+
+        return True
+    except Exception as e:
+        print(f"❌ 发送邮件失败: {e}")
+        return False
+
+def generate_verification_code():
+    """生成6位数字验证码"""
+    return ''.join(random.choices(string.digits, k=6))
+
+@app.route('/api/auth/send-verification', methods=['POST'])
+def send_verification_code():
+    """发送邮箱验证码"""
     data = request.get_json()
-    username = data.get('username', '').strip()
     email = data.get('email', '').strip()
-    password = data.get('password', '').strip()
-    
-    if not username or not email or not password:
-        return jsonify({'success': False, 'message': '用户名、邮箱和密码不能为空'}), 400
-    
-    if len(username) < 3:
-        return jsonify({'success': False, 'message': '用户名至少3个字符'}), 400
-    
-    if len(password) < 6:
-        return jsonify({'success': False, 'message': '密码至少6个字符'}), 400
-    
+
+    if not email:
+        return jsonify({'success': False, 'message': '邮箱不能为空'}), 400
+
     # 验证邮箱格式
     import re
     if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
         return jsonify({'success': False, 'message': '邮箱格式不正确'}), 400
-    
+
+    # 检查邮箱是否已注册
     conn = get_db()
     cursor = conn.cursor()
-    
+    cursor.execute('SELECT * FROM users WHERE email = ?', (email,))
+    if cursor.fetchone():
+        conn.close()
+        return jsonify({'success': False, 'message': '邮箱已被注册'}), 400
+
+    # 生成验证码
+    code = generate_verification_code()
+    expires_at = datetime.now() + timedelta(minutes=10)  # 10分钟后过期
+
+    # 保存验证码到数据库
+    cursor.execute(
+        'INSERT INTO email_verifications (email, code, expires_at) VALUES (?, ?, ?)',
+        (email, code, expires_at)
+    )
+    conn.commit()
+    conn.close()
+
+    # 发送邮件
+    subject = '学术配色推荐器 - 邮箱验证码'
+    body = f'''
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #FFB6C1;">🎨 学术配色推荐器</h2>
+        <p>您好！</p>
+        <p>您正在注册学术配色推荐器账号，验证码为：</p>
+        <div style="background: linear-gradient(135deg, #FFE5EC 0%, #FFF0F5 100%);
+                    padding: 20px;
+                    text-align: center;
+                    border-radius: 10px;
+                    margin: 20px 0;">
+            <span style="font-size: 32px; font-weight: bold; color: #FF6B9D; letter-spacing: 5px;">{code}</span>
+        </div>
+        <p style="color: #888;">验证码有效期为10分钟，请尽快使用。</p>
+        <p style="color: #888;">如果这不是您的操作，请忽略此邮件。</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+        <p style="color: #aaa; font-size: 12px;">学术配色推荐器 - 让论文配色更专业</p>
+    </div>
+    '''
+
+    if send_email(email, subject, body):
+        return jsonify({
+            'success': True,
+            'message': '验证码已发送到邮箱',
+            'code': code if not SMTP_USERNAME else None  # 开发环境返回验证码
+        }), 200
+    else:
+        return jsonify({'success': False, 'message': '发送验证码失败，请稍后重试'}), 500
+
+@app.route('/api/auth/verify-code', methods=['POST'])
+def verify_code():
+    """验证邮箱验证码"""
+    data = request.get_json()
+    email = data.get('email', '').strip()
+    code = data.get('code', '').strip()
+
+    if not email or not code:
+        return jsonify({'success': False, 'message': '邮箱和验证码不能为空'}), 400
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # 查找最新的未使用的验证码
+    cursor.execute('''
+        SELECT * FROM email_verifications
+        WHERE email = ? AND code = ? AND used = 0 AND expires_at > ?
+        ORDER BY created_at DESC LIMIT 1
+    ''', (email, code, datetime.now()))
+
+    verification = cursor.fetchone()
+
+    if not verification:
+        conn.close()
+        return jsonify({'success': False, 'message': '验证码错误或已过期'}), 400
+
+    # 标记验证码为已使用
+    cursor.execute('UPDATE email_verifications SET used = 1 WHERE id = ?', (verification['id'],))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True, 'message': '验证成功'}), 200
+
+# ==================== 用户认证 API ====================
+
+@app.route('/api/auth/register', methods=['POST'])
+def register():
+    """用户注册（需要验证码）"""
+    data = request.get_json()
+    username = data.get('username', '').strip()
+    email = data.get('email', '').strip()
+    password = data.get('password', '').strip()
+    verification_code = data.get('verificationCode', '').strip()
+
+    if not username or not email or not password or not verification_code:
+        return jsonify({'success': False, 'message': '用户名、邮箱、密码和验证码不能为空'}), 400
+
+    if len(username) < 3:
+        return jsonify({'success': False, 'message': '用户名至少3个字符'}), 400
+
+    if len(password) < 6:
+        return jsonify({'success': False, 'message': '密码至少6个字符'}), 400
+
+    # 验证邮箱格式
+    import re
+    if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+        return jsonify({'success': False, 'message': '邮箱格式不正确'}), 400
+
+    # 验证验证码
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT * FROM email_verifications
+        WHERE email = ? AND code = ? AND used = 1 AND expires_at > ?
+        ORDER BY created_at DESC LIMIT 1
+    ''', (email, verification_code, datetime.now()))
+
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({'success': False, 'message': '验证码错误或未验证'}), 400
+
     # 检查用户名是否已存在
     cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
     if cursor.fetchone():
         conn.close()
         return jsonify({'success': False, 'message': '用户名已存在'}), 400
-    
+
     # 检查邮箱是否已存在
     cursor.execute('SELECT * FROM users WHERE email = ?', (email,))
     if cursor.fetchone():
         conn.close()
         return jsonify({'success': False, 'message': '邮箱已被注册'}), 400
-    
+
     # 创建新用户
     password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
     cursor.execute(
@@ -138,16 +300,16 @@ def register():
         (username, email, password_hash, 'user')
     )
     conn.commit()
-    
+
     # 获取新用户信息
     user_id = cursor.lastrowid
     cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
     user = cursor.fetchone()
     conn.close()
-    
+
     # 生成JWT token
     access_token = create_access_token(identity=str(user_id))
-    
+
     return jsonify({
         'success': True,
         'message': '注册成功',
@@ -286,28 +448,29 @@ def get_palettes():
     """获取配色列表"""
     sort_by = request.args.get('sort', 'time')  # time 或 likes
     palette_type = request.args.get('type', None)  # 筛选类型
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    
+
     # 构建查询
     query = 'SELECT * FROM palettes'
     params = []
-    
-    if palette_type and palette_type != '自定义':
+
+    # 根据类型筛选
+    if palette_type:
         query += ' WHERE type = ?'
         params.append(palette_type)
-    
+
     # 排序
     if sort_by == 'likes':
         query += ' ORDER BY likes DESC, created_at DESC'
     else:
         query += ' ORDER BY created_at DESC'
-    
+
     cursor.execute(query, params)
     palettes = cursor.fetchall()
     conn.close()
-    
+
     # 格式化返回数据
     result = []
     for p in palettes:
@@ -322,7 +485,7 @@ def get_palettes():
             'likes': p['likes'],
             'createdAt': p['created_at']
         })
-    
+
     return jsonify({
         'success': True,
         'palettes': result
