@@ -544,46 +544,64 @@ def get_like_status(palette_id):
 
 @app.route('/api/palettes/<int:palette_id>/like', methods=['POST'])
 def like_palette(palette_id):
-    """点赞配色"""
-    user_id = get_jwt_identity()
+    """点赞/取消点赞配色"""
+    # 获取用户ID（如果已登录）
+    user_id = None
+    try:
+        user_id = get_jwt_identity()
+    except:
+        pass
+
+    # 获取IP地址
     ip_address = request.remote_addr
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    
+
     # 检查是否已点赞
-    cursor.execute(
-        'SELECT * FROM likes WHERE palette_id = ? AND user_id = ?',
-        (palette_id, user_id)
-    )
-    if cursor.fetchone():
+    if user_id:
+        cursor.execute('''
+            SELECT * FROM likes WHERE palette_id = ? AND user_id = ?
+        ''', (palette_id, user_id))
+    else:
+        cursor.execute('''
+            SELECT * FROM likes WHERE palette_id = ? AND ip_address = ?
+        ''', (palette_id, ip_address))
+
+    existing_like = cursor.fetchone()
+
+    if existing_like:
+        # 取消点赞
+        cursor.execute('DELETE FROM likes WHERE id = ?', (existing_like[0],))
+        cursor.execute('''
+            UPDATE palettes SET likes = likes - 1 WHERE id = ? AND likes > 0
+        ''', (palette_id,))
+        conn.commit()
+
+        # 获取更新后的点赞数
+        cursor.execute('SELECT likes FROM palettes WHERE id = ?', (palette_id,))
+        likes = cursor.fetchone()[0]
         conn.close()
-        return jsonify({'success': False, 'message': '你已经点赞过了'}), 400
-    
-    # 添加点赞记录
-    cursor.execute(
-        'INSERT INTO likes (palette_id, user_id, ip_address) VALUES (?, ?, ?)',
-        (palette_id, user_id, ip_address)
-    )
-    
-    # 更新点赞数
-    cursor.execute(
-        'UPDATE palettes SET likes = likes + 1 WHERE id = ?',
-        (palette_id,)
-    )
-    
-    # 获取新的点赞数
-    cursor.execute('SELECT likes FROM palettes WHERE id = ?', (palette_id,))
-    palette = cursor.fetchone()
-    
-    conn.commit()
-    conn.close()
-    
-    return jsonify({
-        'success': True,
-        'message': '点赞成功',
-        'likes': palette['likes']
-    }), 200
+
+        return jsonify({'success': True, 'liked': False, 'likes': likes}), 200
+    else:
+        # 添加点赞
+        cursor.execute('''
+            INSERT INTO likes (palette_id, user_id, ip_address, created_at)
+            VALUES (?, ?, ?, ?)
+        ''', (palette_id, user_id, ip_address, datetime.now()))
+
+        cursor.execute('''
+            UPDATE palettes SET likes = likes + 1 WHERE id = ?
+        ''', (palette_id,))
+        conn.commit()
+
+        # 获取更新后的点赞数
+        cursor.execute('SELECT likes FROM palettes WHERE id = ?', (palette_id,))
+        likes = cursor.fetchone()[0]
+        conn.close()
+
+        return jsonify({'success': True, 'liked': True, 'likes': likes}), 200
 
 @app.route('/api/palettes/<int:palette_id>', methods=['DELETE'])
 @jwt_required()
