@@ -3936,7 +3936,7 @@
                     </div>
                     
                     <div style="text-align: center; margin: 20px 0;">
-                        <button class="generate-btn" onclick="openChartModal({name: '${palette.name}', colors: ${JSON.stringify(colorHexes)}})" style="padding: 12px 30px; font-size: 1rem;">
+                        <button class="generate-btn" onclick="openDailyPaletteChart()" style="padding: 12px 30px; font-size: 1rem;">
                             📊 预览图表效果
                         </button>
                     </div>
@@ -3953,6 +3953,13 @@
             `;
             
             container.innerHTML = dailyHTML;
+        }
+
+        // 每日配色图表预览
+        function openDailyPaletteChart() {
+            const palette = getDailyPalette();
+            const colorHexes = palette.colors.map(c => c.hex);
+            openChartModal({name: palette.name, colors: colorHexes});
         }
 
         // 用户自定义配色存储
@@ -4567,6 +4574,136 @@
             try {
                 const response = await fetch(`${API_BASE}/api/palettes/${paletteId}`, {
                     method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showToast('配色已删除');
+                    loadAdminPalettes();
+                } else {
+                    showToast(data.message || '删除失败');
+                }
+            } catch (error) {
+                console.error('删除配色失败:', error);
+                showToast('网络错误，请稍后重试');
+            }
+        }
+
+        // 管理员：加载用户列表
+        async function loadAdminUsers() {
+            const token = localStorage.getItem('access_token');
+            const container = document.getElementById('adminUsersList');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/users`, {
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    if (data.users.length === 0) {
+                        container.innerHTML = `
+                            <div style="text-align: center; padding: 40px; color: #888;">
+                                <div style="font-size: 3rem; margin-bottom: 20px;">👥</div>
+                                <div>暂无用户</div>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    container.innerHTML = data.users.map(user => `
+                        <div class="admin-item">
+                            <div class="admin-item-header">
+                                <div>
+                                    <div class="admin-item-title">${user.username} ${user.role === 'admin' ? '<span style="background: #FFB6C1; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; margin-left: 10px;">管理员</span>' : ''}</div>
+                                    <div class="admin-item-meta">
+                                        ID: ${user.id} | 邮箱: ${user.email || '未设置'} | 注册时间: ${new Date(user.created_at).toLocaleDateString('zh-CN')}
+                                    </div>
+                                </div>
+                                <div class="admin-item-actions">
+                                    ${user.role === 'admin' ? 
+                                        `<button class="admin-action-btn" onclick="adminUpdateUserRole(${user.id}, 'user')" style="background: #9B59B6;">撤销管理员</button>` : 
+                                        `<button class="admin-action-btn" onclick="adminUpdateUserRole(${user.id}, 'admin')" style="background: #2ECC71;">设为管理员</button>`
+                                    }
+                                    <button class="admin-action-btn delete" onclick="adminDeleteUser(${user.id})">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="color: #FF6B6B; text-align: center;">没有权限</p>';
+                }
+            } catch (error) {
+                console.error('加载用户失败:', error);
+                container.innerHTML = '<p style="color: #FF6B6B; text-align: center;">加载失败，请稍后重试</p>';
+            }
+        }
+
+        // 管理员：删除用户
+        async function adminDeleteUser(userId) {
+            if (!confirm('确定要删除这个用户吗？这将同时删除该用户的所有配色和点赞记录。')) return;
+
+            const token = localStorage.getItem('access_token');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showToast('用户已删除');
+                    loadAdminUsers();
+                } else {
+                    showToast(data.message || '删除失败');
+                }
+            } catch (error) {
+                console.error('删除用户失败:', error);
+                showToast('网络错误，请稍后重试');
+            }
+        }
+
+        // 管理员：修改用户权限
+        async function adminUpdateUserRole(userId, newRole) {
+            const action = newRole === 'admin' ? '设为管理员' : '撤销管理员权限';
+            if (!confirm(`确定要${action}吗？`)) return;
+
+            const token = localStorage.getItem('access_token');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/users/${userId}/role`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({role: newRole})
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showToast(data.message);
+                    loadAdminUsers();
+                } else {
+                    showToast(data.message || '操作失败');
+                }
+            } catch (error) {
+                console.error('修改权限失败:', error);
+                showToast('网络错误，请稍后重试');
+            }
+        }
+
+        // 打开管理员用户管理模态框
+        function openAdminUsersModal() {
+            document.getElementById('adminUsersModal').style.display = 'flex';
+            loadAdminUsers();
+        }
+
+        function closeAdminUsersModal() {
+            document.getElementById('adminUsersModal').style.display = 'none';
+        }
                     headers: {'Authorization': `Bearer ${token}`}
                 });
 
