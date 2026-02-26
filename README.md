@@ -93,17 +93,6 @@ palette.micuks.click {
 caddy run --config /etc/caddy/Caddyfile
 ```
 
-## 🔐 默认账号
-
-### 管理员
-- 用户名：`admin`
-- 密码：`admin123`
-
-### 测试用户
-- 用户名：`testuser2`
-- 邮箱：`test2@example.com`
-- 密码：`test123`
-
 ## 📊 数据库结构
 
 ### users表
