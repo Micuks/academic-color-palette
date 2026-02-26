@@ -4387,6 +4387,11 @@
             localStorage.removeItem('currentUser');
             hideUserPanel();
             showToast('已退出登录');
+            
+            // 重新渲染配色列表，更新点赞状态
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const filterType = activeBtn ? (activeBtn.textContent.includes('自定义') ? '自定义' : activeBtn.textContent) : '三角配色';
+            renderPalettes(filterType);
         }
 
         // 加载我的配色
