@@ -511,6 +511,22 @@ def get_palettes():
         'palettes': result
     }), 200
 
+def get_real_ip():
+    """获取真实IP地址"""
+    # 优先从X-Forwarded-For获取
+    forwarded_for = request.headers.get('X-Forwarded-For')
+    if forwarded_for:
+        # X-Forwarded-For可能包含多个IP，取第一个
+        return forwarded_for.split(',')[0].strip()
+    
+    # 其次从X-Real-IP获取
+    real_ip = request.headers.get('X-Real-IP')
+    if real_ip:
+        return real_ip
+    
+    # 最后使用remote_addr
+    return request.remote_addr
+
 @app.route('/api/palettes/<int:palette_id>/like-status', methods=['GET'])
 def get_like_status(palette_id):
     """检查点赞状态"""
@@ -521,8 +537,8 @@ def get_like_status(palette_id):
     except:
         pass
 
-    # 获取IP地址
-    ip_address = request.remote_addr
+    # 获取真实IP地址
+    ip_address = get_real_ip()
 
     conn = get_db()
     cursor = conn.cursor()
@@ -552,8 +568,8 @@ def like_palette(palette_id):
     except:
         pass
 
-    # 获取IP地址
-    ip_address = request.remote_addr
+    # 获取真实IP地址
+    ip_address = get_real_ip()
 
     conn = get_db()
     cursor = conn.cursor()
