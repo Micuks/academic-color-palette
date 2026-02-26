@@ -550,11 +550,14 @@ def get_like_status(palette_id):
             from flask_jwt_extended import decode_token
             decoded = decode_token(token)
             user_id = decoded.get('sub')
-    except:
+            print(f"[后端-点赞状态] palette_id={palette_id}, user_id={user_id}, token有效")
+    except Exception as e:
+        print(f"[后端-点赞状态] palette_id={palette_id}, token无效或无token: {e}")
         pass
 
     # 获取真实IP地址
     ip_address = get_real_ip()
+    print(f"[后端-点赞状态] palette_id={palette_id}, user_id={user_id}, ip_address={ip_address}")
 
     conn = get_db()
     cursor = conn.cursor()
@@ -571,7 +574,8 @@ def get_like_status(palette_id):
 
     liked = cursor.fetchone() is not None
     conn.close()
-
+    
+    print(f"[后端-点赞状态] palette_id={palette_id}, liked={liked}")
     return jsonify({'success': True, 'liked': liked}), 200
 
 @app.route('/api/palettes/<int:palette_id>/like', methods=['POST'])
@@ -588,11 +592,14 @@ def like_palette(palette_id):
             from flask_jwt_extended import decode_token
             decoded = decode_token(token)
             user_id = decoded.get('sub')
-    except:
+            print(f"[后端-点赞操作] palette_id={palette_id}, user_id={user_id}, token有效")
+    except Exception as e:
+        print(f"[后端-点赞操作] palette_id={palette_id}, token无效或无token: {e}")
         pass
 
     # 获取真实IP地址
     ip_address = get_real_ip()
+    print(f"[后端-点赞操作] palette_id={palette_id}, user_id={user_id}, ip_address={ip_address}")
 
     conn = get_db()
     cursor = conn.cursor()
@@ -622,6 +629,7 @@ def like_palette(palette_id):
         likes = cursor.fetchone()[0]
         conn.close()
 
+        print(f"[后端-点赞操作] palette_id={palette_id}, 取消点赞, likes={likes}")
         return jsonify({'success': True, 'liked': False, 'likes': likes}), 200
     else:
         # 添加点赞
@@ -640,6 +648,7 @@ def like_palette(palette_id):
         likes = cursor.fetchone()[0]
         conn.close()
 
+        print(f"[后端-点赞操作] palette_id={palette_id}, 添加点赞, likes={likes}")
         return jsonify({'success': True, 'liked': True, 'likes': likes}), 200
 
 @app.route('/api/palettes/<int:palette_id>', methods=['DELETE'])

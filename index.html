@@ -2920,13 +2920,18 @@
                     const checkLikeStatus = async () => {
                         try {
                             const headers = {'Content-Type': 'application/json'};
-                            if (currentUser) {
-                                headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+                            const token = localStorage.getItem('access_token');
+                            if (token) {
+                                headers['Authorization'] = `Bearer ${token}`;
                             }
+                            console.log(`[点赞状态检查] palette_id=${palette.id}, currentUser=${currentUser ? currentUser.username : '游客'}, token=${token ? '有' : '无'}`);
+                            
                             const response = await fetch(`${API_BASE}/api/palettes/${palette.id}/like-status`, {
                                 headers: headers
                             });
                             const data = await response.json();
+                            console.log(`[点赞状态结果] palette_id=${palette.id}, liked=${data.liked}, success=${data.success}`);
+                            
                             if (data.success) {
                                 const isLiked = data.liked;
                                 likeBtn.innerHTML = `${isLiked ? '❤️' : '🤍'} ${palette.likes || 0}`;
@@ -2955,14 +2960,19 @@
                         e.stopPropagation();
                         try {
                             const headers = {'Content-Type': 'application/json'};
-                            if (currentUser) {
-                                headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+                            const token = localStorage.getItem('access_token');
+                            if (token) {
+                                headers['Authorization'] = `Bearer ${token}`;
                             }
+                            console.log(`[点赞操作] palette_id=${palette.id}, currentUser=${currentUser ? currentUser.username : '游客'}, token=${token ? '有' : '无'}`);
+                            
                             const response = await fetch(`${API_BASE}/api/palettes/${palette.id}/like`, {
                                 method: 'POST',
                                 headers: headers
                             });
                             const data = await response.json();
+                            console.log(`[点赞结果] palette_id=${palette.id}, liked=${data.liked}, likes=${data.likes}, success=${data.success}`);
+                            
                             if (data.success) {
                                 // 更新点赞状态
                                 palette.likes = data.likes;
@@ -4248,9 +4258,12 @@
                     showUserPanel();
                     showToast(`欢迎回来，${username}！`);
                     
+                    console.log(`[登录成功] user=${currentUser.username}, user_id=${currentUser.id}, token=${data.access_token ? '已保存' : '无'}`);
+                    
                     // 重新渲染配色列表，更新点赞状态
                     const activeBtn = document.querySelector('.filter-btn.active');
                     const filterType = activeBtn ? (activeBtn.textContent.includes('自定义') ? '自定义' : activeBtn.textContent) : '三角配色';
+                    console.log(`[重新渲染] filterType=${filterType}`);
                     renderPalettes(filterType);
                 } else {
                     showToast(data.message || '登录失败');
@@ -4393,9 +4406,12 @@
             hideUserPanel();
             showToast('已退出登录');
             
+            console.log(`[退出登录] currentUser=${currentUser}, token=${localStorage.getItem('access_token')}`);
+            
             // 重新渲染配色列表，更新点赞状态
             const activeBtn = document.querySelector('.filter-btn.active');
             const filterType = activeBtn ? (activeBtn.textContent.includes('自定义') ? '自定义' : activeBtn.textContent) : '三角配色';
+            console.log(`[重新渲染] filterType=${filterType}`);
             renderPalettes(filterType);
         }
 
