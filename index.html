@@ -4704,6 +4704,17 @@
         function closeAdminUsersModal() {
             document.getElementById('adminUsersModal').style.display = 'none';
         }
+
+        // 管理员：删除配色
+        async function deletePalette(paletteId) {
+            if (!confirm('确定要删除这个配色吗？')) {
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch(`${API_BASE}/api/palettes/${paletteId}`, {
+                    method: 'DELETE',
                     headers: {'Authorization': `Bearer ${token}`}
                 });
 
