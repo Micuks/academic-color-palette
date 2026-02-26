@@ -3914,6 +3914,9 @@
                 weekday: 'long'
             });
 
+            // 提取颜色HEX值
+            const colorHexes = palette.colors.map(c => c.hex);
+
             // 创建每日配色内容
             const dailyHTML = `
                 <div class="daily-palette">
@@ -3930,6 +3933,12 @@
                                 </div>
                             </div>
                         `).join('')}
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <button class="generate-btn" onclick="openChartModal({name: '${palette.name}', colors: ${JSON.stringify(colorHexes)}})" style="padding: 12px 30px; font-size: 1rem;">
+                            📊 预览图表效果
+                        </button>
                     </div>
                     
                     <div class="daily-palette-usage">
