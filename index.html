@@ -2884,21 +2884,21 @@
                 // 自定义配色显示元信息
                 if (filterType === '自定义' && palette.username) {
                     const metaContainer = document.createElement('div');
-                    metaContainer.style.cssText = 'margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee;';
+                    metaContainer.style.cssText = 'margin-top: 12px; margin-bottom: 20px; padding: 10px; background: #FFF0F5; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;';
 
-                    // 上传者信息
+                    // 左侧：上传者信息
                     const uploaderInfo = document.createElement('div');
-                    uploaderInfo.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 8px;';
+                    uploaderInfo.style.cssText = 'display: flex; align-items: center; gap: 8px;';
 
                     const avatar = document.createElement('div');
                     avatar.style.cssText = 'width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;';
                     avatar.textContent = palette.username.charAt(0).toUpperCase();
 
                     const uploaderText = document.createElement('div');
-                    uploaderText.style.cssText = 'flex: 1;';
+                    uploaderText.style.cssText = 'font-size: 0.85rem;';
 
                     const uploaderName = document.createElement('div');
-                    uploaderName.style.cssText = 'font-size: 0.9rem; color: #333; font-weight: 500;';
+                    uploaderName.style.cssText = 'color: #333; font-weight: 500;';
                     uploaderName.textContent = palette.username;
 
                     const uploadTime = document.createElement('div');
@@ -2911,10 +2911,7 @@
                     uploaderInfo.appendChild(avatar);
                     uploaderInfo.appendChild(uploaderText);
 
-                    // 点赞按钮
-                    const likeContainer = document.createElement('div');
-                    likeContainer.style.cssText = 'display: flex; align-items: center; justify-content: space-between;';
-
+                    // 右侧：点赞按钮
                     const likeBtn = document.createElement('button');
                     likeBtn.className = 'like-button';
                     likeBtn.style.cssText = 'display: flex; align-items: center; gap: 6px; padding: 8px 16px; background: white; border: 1px solid #e0e0e0; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; color: #666;';
