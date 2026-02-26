@@ -528,14 +528,11 @@ def get_real_ip():
     return request.remote_addr
 
 @app.route('/api/palettes/<int:palette_id>/like-status', methods=['GET'])
+@jwt_required(optional=True)
 def get_like_status(palette_id):
     """检查点赞状态"""
     # 获取用户ID（如果已登录）
-    user_id = None
-    try:
-        user_id = get_jwt_identity()
-    except:
-        pass
+    user_id = get_jwt_identity()
 
     # 获取真实IP地址
     ip_address = get_real_ip()
@@ -559,14 +556,11 @@ def get_like_status(palette_id):
     return jsonify({'success': True, 'liked': liked}), 200
 
 @app.route('/api/palettes/<int:palette_id>/like', methods=['POST'])
+@jwt_required(optional=True)
 def like_palette(palette_id):
     """点赞/取消点赞配色"""
     # 获取用户ID（如果已登录）
-    user_id = None
-    try:
-        user_id = get_jwt_identity()
-    except:
-        pass
+    user_id = get_jwt_identity()
 
     # 获取真实IP地址
     ip_address = get_real_ip()
