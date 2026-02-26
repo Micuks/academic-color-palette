@@ -691,6 +691,129 @@ def delete_palette(palette_id):
         'message': '删除成功'
     }), 200
 
+@app.route('/api/admin/users', methods=['GET'])
+@jwt_required()
+def admin_get_users():
+    """管理员获取所有用户"""
+    user_id = get_jwt_identity()
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 检查权限
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    
+    if user['role'] != 'admin':
+        conn.close()
+        return jsonify({'success': False, 'message': '没有权限'}), 403
+    
+    # 获取所有用户
+    cursor.execute('SELECT id, username, email, role, created_at FROM users ORDER BY created_at DESC')
+    users = cursor.fetchall()
+    conn.close()
+    
+    # 格式化返回数据
+    result = []
+    for u in users:
+        result.append({
+            'id': u['id'],
+            'username': u['username'],
+            'email': u['email'],
+            'role': u['role'],
+            'created_at': u['created_at']
+        })
+    
+    return jsonify({'success': True, 'users': result}), 200
+
+@app.route('/api/admin/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def admin_delete_user(user_id):
+    """管理员删除用户"""
+    admin_id = get_jwt_identity()
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 检查权限
+    cursor.execute('SELECT * FROM users WHERE id = ?', (admin_id,))
+    admin = cursor.fetchone()
+    
+    if admin['role'] != 'admin':
+        conn.close()
+        return jsonify({'success': False, 'message': '没有权限'}), 403
+    
+    # 不能删除自己
+    if admin_id == user_id:
+        conn.close()
+        return jsonify({'success': False, 'message': '不能删除自己的账号'}), 400
+    
+    # 检查用户是否存在
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    
+    if not user:
+        conn.close()
+        return jsonify({'success': False, 'message': '用户不存在'}), 404
+    
+    # 删除用户的点赞记录
+    cursor.execute('DELETE FROM likes WHERE user_id = ?', (user_id,))
+    
+    # 删除用户的配色
+    cursor.execute('DELETE FROM palettes WHERE user_id = ?', (user_id,))
+    
+    # 删除用户
+    cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True, 'message': '用户已删除'}), 200
+
+@app.route('/api/admin/users/<int:user_id>/role', methods=['PUT'])
+@jwt_required()
+def admin_update_user_role(user_id):
+    """管理员修改用户权限"""
+    admin_id = get_jwt_identity()
+    
+    data = request.get_json()
+    new_role = data.get('role')
+    
+    if new_role not in ['admin', 'user']:
+        return jsonify({'success': False, 'message': '无效的角色'}), 400
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 检查权限
+    cursor.execute('SELECT * FROM users WHERE id = ?', (admin_id,))
+    admin = cursor.fetchone()
+    
+    if admin['role'] != 'admin':
+        conn.close()
+        return jsonify({'success': False, 'message': '没有权限'}), 403
+    
+    # 不能修改自己的权限
+    if admin_id == user_id:
+        conn.close()
+        return jsonify({'success': False, 'message': '不能修改自己的权限'}), 400
+    
+    # 检查用户是否存在
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    
+    if not user:
+        conn.close()
+        return jsonify({'success': False, 'message': '用户不存在'}), 404
+    
+    # 更新用户权限
+    cursor.execute('UPDATE users SET role = ? WHERE id = ?', (new_role, user_id))
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True, 'message': f'用户权限已更新为 {new_role}'}), 200
+
 @app.route('/api/admin/palettes', methods=['GET'])
 @jwt_required()
 def admin_get_palettes():
