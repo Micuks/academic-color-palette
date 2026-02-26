@@ -23,6 +23,15 @@ CORS(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
+# JWT错误处理器 - 让token无效时返回None而不是报错
+@jwt.invalid_token_loader
+def invalid_token_callback(error_string):
+    return None
+
+@jwt.unauthorized_loader
+def unauthorized_callback(error_string):
+    return None
+
 # 配置
 app.config['JWT_SECRET_KEY'] = 'your-secret-key-change-in-production'  # 生产环境需要修改
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
@@ -528,11 +537,21 @@ def get_real_ip():
     return request.remote_addr
 
 @app.route('/api/palettes/<int:palette_id>/like-status', methods=['GET'])
-@jwt_required(optional=True)
 def get_like_status(palette_id):
     """检查点赞状态"""
     # 获取用户ID（如果已登录）
-    user_id = get_jwt_identity()
+    user_id = None
+    try:
+        # 尝试从header中获取token
+        auth_header = request.headers.get('Authorization', None)
+        if auth_header and auth_header.startswith('Bearer '):
+            token = auth_header.split(' ')[1]
+            # 尝试解码token
+            from flask_jwt_extended import decode_token
+            decoded = decode_token(token)
+            user_id = decoded.get('sub')
+    except:
+        pass
 
     # 获取真实IP地址
     ip_address = get_real_ip()
@@ -556,11 +575,21 @@ def get_like_status(palette_id):
     return jsonify({'success': True, 'liked': liked}), 200
 
 @app.route('/api/palettes/<int:palette_id>/like', methods=['POST'])
-@jwt_required(optional=True)
 def like_palette(palette_id):
     """点赞/取消点赞配色"""
     # 获取用户ID（如果已登录）
-    user_id = get_jwt_identity()
+    user_id = None
+    try:
+        # 尝试从header中获取token
+        auth_header = request.headers.get('Authorization', None)
+        if auth_header and auth_header.startswith('Bearer '):
+            token = auth_header.split(' ')[1]
+            # 尝试解码token
+            from flask_jwt_extended import decode_token
+            decoded = decode_token(token)
+            user_id = decoded.get('sub')
+    except:
+        pass
 
     # 获取真实IP地址
     ip_address = get_real_ip()
