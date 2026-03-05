@@ -138,18 +138,26 @@ def send_email(to_email, subject, body):
 
     try:
         msg = MIMEMultipart()
-        msg['From'] = 'palette-noreply@micuks.click'  # 使用别名作为发件人
+        msg['From'] = 'Academic-Color-Palette <palette-noreply@micuks.click>'
         msg['To'] = to_email
         msg['Subject'] = subject
 
         msg.attach(MIMEText(body, 'html', 'utf-8'))
 
-        # Gmail使用SMTP + STARTTLS（端口587）
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()  # 开启TLS加密
+        # Gmail SMTP + STARTTLS
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=10)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
         server.login(SMTP_USERNAME, SMTP_PASSWORD)
         server.send_message(msg)
         server.quit()
+        
+        print(f"邮件发送成功: {to_email}")
+        return True
+    except Exception as e:
+        print(f"邮件发送失败: {e}")
+        return False
 
         return True
     except Exception as e:
@@ -491,10 +499,11 @@ def forgot_password():
     code = ''.join(random.choices(string.digits, k=6))
     
     # 存储验证码（5分钟有效）
+    expires_at = datetime.now() + timedelta(minutes=5)
     cursor.execute('''
-        INSERT OR REPLACE INTO email_verifications (email, code, created_at)
-        VALUES (?, ?, ?)
-    ''', (user['email'], code, datetime.now()))
+        INSERT OR REPLACE INTO email_verifications (email, code, created_at, expires_at)
+        VALUES (?, ?, ?, ?)
+    ''', (user['email'], code, datetime.now(), expires_at))
     
     conn.commit()
     conn.close()
