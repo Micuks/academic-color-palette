@@ -1216,51 +1216,98 @@
         }
 
         .daily-palette-header {
-            padding: 24px 32px;
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .daily-palette-header:hover {
+            background: #F9FAFB;
+        }
+
+        .daily-palette-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
         }
 
         .daily-palette-badge {
-            display: inline-block;
             color: #6B7280;
             font-size: 12px;
             font-weight: 500;
             letter-spacing: 1px;
-            margin-bottom: 8px;
             text-transform: uppercase;
         }
 
         .daily-palette-title {
-            font-size: 32px;
+            font-size: 20px;
             font-weight: 700;
             color: #111827;
-            margin: 0 0 8px 0;
+            margin: 0;
+        }
+
+        .daily-palette-colors-preview {
+            display: flex;
+            gap: 6px;
+        }
+
+        .daily-palette-colors-preview .color-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 0;
+        }
+
+        .daily-palette-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9CA3AF;
+            font-size: 14px;
+        }
+
+        .daily-palette-arrow {
+            transition: transform 0.3s;
+        }
+
+        .daily-palette-arrow.expanded {
+            transform: rotate(180deg);
+        }
+
+        .daily-palette-body {
+            padding: 24px;
+            display: none;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .daily-palette-body.expanded {
+            display: block;
         }
 
         .daily-palette-date {
             font-size: 14px;
             color: #9CA3AF;
-        }
-
-        .daily-palette-body {
-            padding: 32px;
+            margin-bottom: 16px;
         }
 
         .daily-palette-description {
-            font-size: 16px;
+            font-size: 15px;
             color: #374151;
             line-height: 1.6;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             padding: 16px;
             background: #F9FAFB;
-            border-radius: 0;
         }
 
         .daily-palette-colors {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 16px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         .daily-color-block {
@@ -1269,7 +1316,6 @@
             border-radius: 0;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: none;
         }
 
         .daily-color-block:hover {
@@ -1299,13 +1345,12 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .usage-tag {
             padding: 8px 16px;
             background: #F3F4F6;
-            border-radius: 0;
             font-size: 14px;
             color: #374151;
         }
@@ -1318,7 +1363,6 @@
         .action-btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 0;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -4528,16 +4572,28 @@ ${colors.map((c, i) => `${i + 1}. ${c.hex}`).join('\n')}
                 });
                 const dateStr = `${datePart}  ${weekdayPart}`;
 
-                // 创建每日配色内容（Dribbble 风格）
+                // 创建每日配色内容（Dribbble 风格 - 点击展开）
                 const dailyHTML = `
                     <div class="daily-palette" id="dailyPaletteCard">
-                        <div class="daily-palette-header">
-                            <div class="daily-palette-badge">今日配色推荐</div>
-                            <h2 class="daily-palette-title">${palette.name}</h2>
-                            <div class="daily-palette-date">${dateStr}</div>
+                        <div class="daily-palette-header" onclick="toggleDailyPaletteExpand()">
+                            <div class="daily-palette-left">
+                                <div class="daily-palette-badge">今日配色推荐</div>
+                                <h2 class="daily-palette-title">${palette.name}</h2>
+                                <div class="daily-palette-colors-preview">
+                                    ${palette.colors.slice(0, 5).map(color => `
+                                        <div class="color-dot" style="background: ${color.hex};" title="${color.hex}"></div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="daily-palette-right">
+                                <span>点击查看详情</span>
+                                <span class="daily-palette-arrow" id="dailyPaletteArrow">▼</span>
+                            </div>
                         </div>
                         
-                        <div class="daily-palette-body">
+                        <div class="daily-palette-body" id="dailyPaletteBody">
+                            <div class="daily-palette-date">${dateStr}</div>
+                            
                             <div class="daily-palette-colors">
                                 ${palette.colors.map(color => `
                                     <div>
@@ -4578,16 +4634,29 @@ ${colors.map((c, i) => `${i + 1}. ${c.hex}`).join('\n')}
         }
 
         // 切换每日配色的展开/折叠状态
-        function toggleDailyPalette() {
-            const detail = document.getElementById('dailyPaletteDetail');
+        function toggleDailyPaletteExpand() {
+            const body = document.getElementById('dailyPaletteBody');
             const arrow = document.getElementById('dailyPaletteArrow');
             
-            if (detail.style.display === 'none') {
-                detail.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
+            if (body.classList.contains('expanded')) {
+                body.classList.remove('expanded');
+                arrow.classList.remove('expanded');
             } else {
-                detail.style.display = 'none';
-                arrow.style.transform = 'rotate(0deg)';
+                body.classList.add('expanded');
+                arrow.classList.add('expanded');
+            }
+        }
+
+        // 复制所有颜色
+        async function copyAllColors() {
+            try {
+                const palette = await getDailyPalette();
+                const colorHexes = palette.colors.map(c => c.hex).join(', ');
+                await navigator.clipboard.writeText(colorHexes);
+                showToast('已复制所有颜色: ' + colorHexes);
+            } catch (error) {
+                console.error('复制失败:', error);
+                showToast('复制失败，请手动复制');
             }
         }
 
