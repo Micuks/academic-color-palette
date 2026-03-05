@@ -1205,148 +1205,144 @@
             }
         }
 
-        /* 每日配色 */
+        /* 每日配色 - Dribbble 风格 */
         .daily-palette {
-            background: linear-gradient(135deg, #FFF0F5 0%, #E8F4F8 100%);
-            border-radius: 20px;
-            padding: 40px;
-            border: 2px solid #FFE5EC;
-            position: relative;
-            overflow: hidden;
+            background: white;
+            border-radius: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            margin-bottom: 40px;
         }
 
-        .daily-palette::before {
-            content: '🎨';
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 4rem;
-            opacity: 0.2;
+        .daily-palette-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .daily-palette-badge {
+            display: inline-block;
+            color: #6B7280;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
         .daily-palette-title {
-            font-size: 2.2rem;
+            font-size: 32px;
             font-weight: 700;
-            color: #5D5D5D;
-            margin-bottom: 10px;
+            color: #111827;
+            margin: 0 0 8px 0;
         }
 
         .daily-palette-date {
-            font-size: 1rem;
-            color: #888;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 14px;
+            color: #9CA3AF;
         }
 
-        .daily-palette-date::before {
-            content: '📅';
-            font-size: 1.2rem;
+        .daily-palette-body {
+            padding: 32px;
         }
 
         .daily-palette-description {
-            font-size: 1.1rem;
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 30px;
+            font-size: 16px;
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            padding: 16px;
+            background: #F9FAFB;
+            border-radius: 0;
         }
 
         .daily-palette-colors {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
         .daily-color-block {
-            flex: 1;
-            min-width: 120px;
-            height: 150px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: transform 0.3s;
             position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            aspect-ratio: 3/4;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: none;
         }
 
         .daily-color-block:hover {
-            transform: scale(1.05);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
 
         .daily-color-info {
-            position: absolute;
-            bottom: 15px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            color: white;
-            font-weight: 600;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            padding: 12px 0;
+            text-align: left;
         }
 
         .daily-color-hex {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
             font-family: 'Courier New', monospace;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .daily-color-name {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-size: 12px;
+            color: #6B7280;
         }
 
         .daily-palette-usage {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-            border: 2px solid #F0F0F0;
-        }
-
-        .daily-usage-title {
-            font-size: 1.3rem;
-            color: #5D5D5D;
-            margin-bottom: 15px;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
         }
 
-        .daily-usage-title::before {
-            content: '💡';
-            font-size: 1.5rem;
+        .usage-tag {
+            padding: 8px 16px;
+            background: #F3F4F6;
+            border-radius: 0;
+            font-size: 14px;
+            color: #374151;
         }
 
-        .daily-usage-content {
-            color: #666;
-            line-height: 1.8;
+        .daily-palette-actions {
+            display: flex;
+            gap: 12px;
         }
 
-        .daily-usage-content ul {
-            margin-left: 20px;
-            margin-top: 10px;
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .daily-usage-content li {
-            margin-bottom: 8px;
+        .action-btn-primary {
+            background: #111827;
+            color: white;
         }
 
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .daily-palette {
-                padding: 25px 20px;
-            }
+        .action-btn-primary:hover {
+            background: #1F2937;
+        }
 
-            .daily-palette-title {
-                font-size: 1.8rem;
-            }
+        .action-btn-secondary {
+            background: white;
+            color: #111827;
+            border: 1px solid #E5E7EB;
+        }
 
-            .daily-palette-description {
-                font-size: 1rem;
-            }
-
-            .daily-color-block {
+        .action-btn-secondary:hover {
+            background: #F9FAFB;
+        }
                 min-width: 100px;
                 height: 120px;
             }
@@ -4532,39 +4528,20 @@ ${colors.map((c, i) => `${i + 1}. ${c.hex}`).join('\n')}
                 });
                 const dateStr = `${datePart}  ${weekdayPart}`;
 
-                // 创建每日配色内容（简化版）
+                // 创建每日配色内容（Dribbble 风格）
                 const dailyHTML = `
                     <div class="daily-palette" id="dailyPaletteCard">
-                        <!-- 简化版（默认显示） -->
-                        <div id="dailyPaletteSimple" style="cursor: pointer;" onclick="toggleDailyPalette()">
-                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px;">
-                                <div style="display: flex; align-items: center; gap: 20px; flex: 1;">
-                                    <div style="font-size: 1rem; color: #FFB6C1; font-weight: 600; letter-spacing: 2px;">✨ 今日配色推荐</div>
-                                    <div style="font-size: 1.5rem; font-weight: 700; color: #5D5D5D;">${palette.name}</div>
-                                    <div style="display: flex; gap: 8px;">
-                                        ${palette.colors.slice(0, 5).map(color => `
-                                            <div style="width: 40px; height: 40px; background: ${color.hex}; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" title="${color.hex}"></div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 10px; color: #888;">
-                                    <span style="font-size: 0.9rem;">点击查看详情</span>
-                                    <span id="dailyPaletteArrow" style="font-size: 1.2rem; transition: transform 0.3s;">▼</span>
-                                </div>
-                            </div>
+                        <div class="daily-palette-header">
+                            <div class="daily-palette-badge">今日配色推荐</div>
+                            <h2 class="daily-palette-title">${palette.name}</h2>
+                            <div class="daily-palette-date">${dateStr}</div>
                         </div>
                         
-                        <!-- 详细版（默认隐藏） -->
-                        <div id="dailyPaletteDetail" style="display: none; padding: 20px; border-top: 2px solid #F0F0F0;">
-                            <div style="text-align: center; margin-bottom: 20px;">
-                                <div class="daily-palette-title">${palette.name}</div>
-                            </div>
-                            <div class="daily-palette-date">${dateStr}</div>
-                            <div class="daily-palette-description">${palette.description}</div>
-                            
+                        <div class="daily-palette-body">
                             <div class="daily-palette-colors">
                                 ${palette.colors.map(color => `
-                                    <div class="daily-color-block" style="background: ${color.hex};" onclick="copyToClipboard('${color.hex}')">
+                                    <div>
+                                        <div class="daily-color-block" style="background: ${color.hex};" onclick="copyToClipboard('${color.hex}')"></div>
                                         <div class="daily-color-info">
                                             <div class="daily-color-hex">${color.hex}</div>
                                             <div class="daily-color-name">${color.name}</div>
@@ -4573,26 +4550,21 @@ ${colors.map((c, i) => `${i + 1}. ${c.hex}`).join('\n')}
                                 `).join('')}
                             </div>
                             
-                            <div style="text-align: center; margin: 20px 0;">
-                                <button class="generate-btn" onclick="openDailyPaletteChart()" style="padding: 12px 30px; font-size: 1rem;">
-                                    📊 预览图表效果
+                            <div class="daily-palette-description">${palette.description}</div>
+                            
+                            <div class="daily-palette-usage">
+                                ${palette.usage.map(u => `
+                                    <span class="usage-tag">${u}</span>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="daily-palette-actions">
+                                <button class="action-btn action-btn-primary" onclick="openDailyPaletteChart()">
+                                    预览图表效果
                                 </button>
-                            </div>
-                            
-                            ${palette.festivals && palette.festivals.length > 0 ? `
-                            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                                <div style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">🎉 今日节日</div>
-                                <div style="font-size: 0.85rem; color: #888; line-height: 1.6;">
-                                    ${palette.festivals.map(f => `<span style="margin-right: 10px;">${f}</span>`).join('')}
-                                </div>
-                            </div>
-                            ` : ''}
-                            
-                            <div style="margin-top: 20px;">
-                                <div style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">💡 使用建议</div>
-                                <div style="font-size: 0.85rem; color: #888; line-height: 1.8;">
-                                    ${palette.usage.map(u => `<div>• ${u}</div>`).join('')}
-                                </div>
+                                <button class="action-btn action-btn-secondary" onclick="copyAllColors()">
+                                    复制所有颜色
+                                </button>
                             </div>
                         </div>
                     </div>
