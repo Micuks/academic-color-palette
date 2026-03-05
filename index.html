@@ -1431,48 +1431,50 @@
 
         /* 用户认证按钮 */
         .auth-btn {
-            padding: 10px 25px;
-            border-radius: 25px;
-            border: 2px solid #FFB6C1;
+            padding: 14px 32px;
+            border-radius: 30px;
+            border: none;
             background: white;
-            color: #FFB6C1;
-            font-weight: 600;
+            color: #FF6B9D;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.95rem;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
         }
 
         .auth-btn:hover {
-            background: #FFB6C1;
+            background: #FF6B9D;
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
         }
 
         .auth-btn.register-btn {
-            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
             color: white;
-            border: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
         }
 
         .auth-btn.register-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.5);
         }
 
         /* 用户名按钮 */
         .user-name-btn {
-            padding: 10px 20px;
-            border-radius: 25px;
-            border: 2px solid #FFB6C1;
+            padding: 14px 24px;
+            border-radius: 30px;
+            border: none;
             background: white;
-            color: #5D5D5D;
-            font-weight: 600;
+            color: #FF6B9D;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.95rem;
+            font-size: 16px;
             display: flex;
             align-items: center;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
         }
 
         .user-name-btn:hover {
@@ -1749,9 +1751,9 @@
                 </button>
                 
                 <!-- 未登录状态 -->
-                <div id="authButtons" style="display: flex; gap: 10px;">
-                    <button class="auth-btn" style="border-radius: 25px;" onclick="openLoginModal()">登录</button>
-                    <button class="auth-btn register-btn" style="border-radius: 25px;" onclick="openRegisterModal()">注册</button>
+                <div id="authButtons" style="display: flex; gap: 12px;">
+                    <button class="auth-btn" onclick="openLoginModal()">登录</button>
+                    <button class="auth-btn register-btn" onclick="openRegisterModal()">注册</button>
                 </div>
                 
                 <!-- 已登录状态 -->
