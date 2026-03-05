@@ -4975,9 +4975,9 @@ ${colors.map((c, i) => `${i + 1}. ${c.hex}`).join('\n')}
 
         // 重置密码
         async function handleResetPassword() {
-            const code = document.getElementById('resetPasswordCode').value.trim();
-            const newPassword = document.getElementById('resetPasswordNew').value;
-            const confirmPassword = document.getElementById('resetPasswordConfirm').value;
+            const code = document.getElementById('resetCode').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
 
             if (!code || !newPassword || !confirmPassword) {
                 showToast('请填写所有字段');
@@ -5008,7 +5008,7 @@ ${colors.map((c, i) => `${i + 1}. ${c.hex}`).join('\n')}
                 const data = await response.json();
                 if (data.success) {
                     showToast('密码重置成功，请登录');
-                    closeResetPasswordModal();
+                    closeForgotPasswordModal();
                     openLoginModal();
                 } else {
                     showToast(data.message || '重置失败');
