@@ -1775,18 +1775,16 @@
             <!-- 每日配色内容由 JS 生成 -->
         </div>
 
-        <!-- 标签导航 -->
-        <div class="tabs">
+        <!-- 标签导航（移到次要位置） -->
+        <div class="tabs" style="margin-top: 20px; margin-bottom: 30px;">
             <button class="tab-btn active" onclick="switchTab('palette')">配色库</button>
             <button class="tab-btn" onclick="switchTab('lightness')">颜色分析</button>
             <button class="tab-btn" onclick="switchTab('tools')">工具箱</button>
         </div>
 
-        <!-- 配色库 -->
+        <!-- 配色库（核心功能，直接显示） -->
         <div id="palette" class="tab-content active">
             <section class="section">
-                <h2 class="section-title">配色库</h2>
-
                 <!-- 配色类型筛选器 -->
                 <div class="palette-filter">
                     <div class="filter-buttons">
