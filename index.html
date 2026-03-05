@@ -1431,46 +1431,52 @@
 
         /* 用户认证按钮 */
         .auth-btn {
-            background: #111827;
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            font-size: 14px;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: 2px solid #FFB6C1;
+            background: white;
+            color: #FFB6C1;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s;
+            font-size: 0.95rem;
         }
 
         .auth-btn:hover {
-            background: #1F2937;
+            background: #FFB6C1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
         }
 
         .auth-btn.register-btn {
-            background: white;
-            color: #111827;
-            border: 1px solid #E5E7EB;
+            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            color: white;
+            border: none;
         }
 
         .auth-btn.register-btn:hover {
-            background: #F9FAFB;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
         }
 
         /* 用户名按钮 */
         .user-name-btn {
-            padding: 12px 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #FFB6C1;
             background: white;
-            color: #111827;
+            color: #5D5D5D;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            border: 1px solid #E5E7EB;
         }
 
         .user-name-btn:hover {
-            background: #F9FAFB;
+            background: #FFF0F5;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
         }
