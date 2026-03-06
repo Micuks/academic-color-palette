@@ -144,17 +144,39 @@ def send_email(to_email, subject, body):
 
         msg.attach(MIMEText(body, 'html', 'utf-8'))
 
-        # Gmail SMTP + STARTTLS
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=10)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.send_message(msg)
-        server.quit()
+        # Gmail SMTP + STARTTLS（绕过代理）
+        # 临时移除代理环境变量
+        import os
+        old_http_proxy = os.environ.get('HTTP_PROXY')
+        old_https_proxy = os.environ.get('HTTPS_PROXY')
+        old_all_proxy = os.environ.get('ALL_PROXY')
         
-        print(f"邮件发送成功: {to_email}")
-        return True
+        if 'HTTP_PROXY' in os.environ:
+            del os.environ['HTTP_PROXY']
+        if 'HTTPS_PROXY' in os.environ:
+            del os.environ['HTTPS_PROXY']
+        if 'ALL_PROXY' in os.environ:
+            del os.environ['ALL_PROXY']
+        
+        try:
+            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(SMTP_USERNAME, SMTP_PASSWORD)
+            server.send_message(msg)
+            server.quit()
+            
+            print(f"邮件发送成功: {to_email}")
+            return True
+        finally:
+            # 恢复代理环境变量
+            if old_http_proxy:
+                os.environ['HTTP_PROXY'] = old_http_proxy
+            if old_https_proxy:
+                os.environ['HTTPS_PROXY'] = old_https_proxy
+            if old_all_proxy:
+                os.environ['ALL_PROXY'] = old_all_proxy
     except Exception as e:
         print(f"邮件发送失败: {e}")
         return False
