@@ -1128,7 +1128,7 @@ import requests
 
 # 华为云API配置
 AI_API_URL = "https://api.modelarts-maas.com/v2/chat/completions"
-AI_API_KEY = "***REMOVED***"
+AI_API_KEY = os.environ.get("HUAWEI_MAAS_API_KEY", "")
 
 @app.route('/api/ai-consult', methods=['POST'])
 def ai_consult():

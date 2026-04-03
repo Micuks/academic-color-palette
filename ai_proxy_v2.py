@@ -5,12 +5,13 @@ AI配色咨询API代理 - 稳定版
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
+import os
 import requests
 import sys
 
 # 华为云API配置
 API_URL = "https://api.modelarts-maas.com/v2/chat/completions"
-API_KEY = "***REMOVED***"
+API_KEY = os.environ.get("HUAWEI_MAAS_API_KEY", "")
 
 class AIProxyHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):

@@ -5,6 +5,7 @@ AI配色咨询API代理 - Flask稳定版
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 import requests
 import sys
 
@@ -13,7 +14,7 @@ CORS(app)  # 启用CORS支持
 
 # 华为云API配置
 API_URL = "https://api.modelarts-maas.com/v2/chat/completions"
-API_KEY = "***REMOVED***"
+API_KEY = os.environ.get("HUAWEI_MAAS_API_KEY", "")
 
 @app.route('/api/ai-consult', methods=['POST', 'OPTIONS'])
 def ai_consult():
